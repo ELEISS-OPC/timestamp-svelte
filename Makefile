@@ -2,7 +2,7 @@
 # 	Usage: make dev
 .PHONY: dev
 dev:
-	@npm run dev
+	@npm run dev -- --host 0.0.0.0
 
 # Bump version
 # 	Usage: make patch | minor | major
