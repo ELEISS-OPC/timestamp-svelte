@@ -22,7 +22,7 @@
   let error: string | null = $state(null);
 
   // UI styles
-  const desktopControlsStyle = "absolute bottom-5 z-20 inline-flex";
+  const desktopControlsStyle = "absolute bottom-5 z-20 inline-flex hidden md:inline-flex";
   const mobileControlsStyle =
     "absolute bottom-10 z-20 inline-flex rounded-full w-16 h-16 text-4xl md:hidden";
 
