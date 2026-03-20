@@ -1,9 +1,17 @@
 <script lang="ts">
-	import './layout.css';
-	import favicon from '$lib/assets/favicon.svg';
+  import "./layout.css";
+  import favicon from "$lib/assets/favicon-32x32.png";
 
-	let { children } = $props();
+  let { children } = $props();
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<svelte:head>
+  <title>Timestamp</title>
+  <meta
+    name="description"
+    content="EL & E InfiNet SolutionsPH Systems OPC's employee timekeeping system"
+  />
+
+  <link rel="icon" href={favicon} /></svelte:head
+>
 {@render children()}
