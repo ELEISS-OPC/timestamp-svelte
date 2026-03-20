@@ -101,7 +101,7 @@
     bind:this={video}
     autoplay
     playsinline
-    class="absolute top-0 left-0 w-screen h-screen object-cover"
+    class="absolute top-0 left-0 w-screen h-dvh object-cover"
   ></video>
 
   <!-- Time overlay -->
@@ -167,6 +167,6 @@
   <!-- Canvas overlay -->
   <canvas
     bind:this={canvas}
-    class="absolute top-1/2 left-1/2 z-10 translate-x-[-50%] translate-y-[-50%] w-screen h-screen object-cover"
+    class="absolute top-1/2 left-1/2 z-10 translate-x-[-50%] translate-y-[-50%] w-screen h-dvh object-cover"
   ></canvas>
 </div>
