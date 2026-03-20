@@ -1,5 +1,10 @@
 {
 	"files.associations": {
 		"*.css": "tailwindcss"
-	}
+	},
+	"json.validate.enable": true,
+	"json.schemaDownload.enable": false,
+	"emmet.includeLanguages": {
+    "svelte": "html"
+}
 }

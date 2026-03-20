@@ -11,6 +11,14 @@ const config = {
         domains: ["timestamp-svelte.vercel.app"],
       },
     }),
+  alias: {
+    "$components": "src/lib/components",
+    "$utils": "src/lib/utils",
+    "$ui": "src/lib/components/ui",
+    "$hooks": "src/lib/hooks",
+    "$lib": "src/lib"
+  },
+
   },
   vitePlugin: {
     dynamicCompileOptions: ({ filename }) =>
