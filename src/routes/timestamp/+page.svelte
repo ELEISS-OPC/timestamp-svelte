@@ -95,7 +95,7 @@
   }
 </script>
 
-<div class="relative w-screen h-screen bg-gray-100 overflow-hidden">
+<div class="relative w-screen h-dvh bg-gray-100 overflow-hidden">
   <!-- Video fills the screen -->
   <video
     bind:this={video}
