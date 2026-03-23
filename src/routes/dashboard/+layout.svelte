@@ -16,7 +16,6 @@
   }
 
   const currentSubPath = $derived(getSubPath(currentPath));
-
 </script>
 
 <Sidebar.Provider>
@@ -46,6 +45,8 @@
         </Breadcrumb.Root>
       </div>
     </header>
-    {@render children()}
+    <div class="px-8">
+      {@render children()}
+    </div>
   </Sidebar.Inset>
 </Sidebar.Provider>

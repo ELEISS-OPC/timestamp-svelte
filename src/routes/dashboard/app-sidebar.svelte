@@ -14,7 +14,7 @@
   const dashboardItems = [
     {
       name: "Summary",
-      url: "#",
+      url: "/dashboard/summary",
       icon: ChartPieIcon,
     },
     {
