@@ -5,6 +5,7 @@
   import * as Breadcrumb from "$lib/components/ui/breadcrumb/index.js";
   import * as Sidebar from "$lib/components/ui/sidebar/index.js";
   import { page } from "$app/state";
+  import { toTitleCase } from "$lib/string.js";
 
   let { data, children }: LayoutProps = $props();
   const currentPath = $derived(page.url.pathname);
@@ -39,7 +40,7 @@
               <Breadcrumb.Separator class="hidden md:block" />
             {/if}
             <Breadcrumb.Item>
-              <Breadcrumb.Page>{currentSubPath}</Breadcrumb.Page>
+              <Breadcrumb.Page>{toTitleCase(currentSubPath)}</Breadcrumb.Page>
             </Breadcrumb.Item>
           </Breadcrumb.List>
         </Breadcrumb.Root>
