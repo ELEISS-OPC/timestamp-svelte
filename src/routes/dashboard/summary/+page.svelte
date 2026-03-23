@@ -1,14 +1,9 @@
 <script lang="ts">
   import Histogram from "./histogram.svelte";
-  import * as Card from "$lib/components/ui/card/index";
+  import Metrics from "./metrics.svelte";
 </script>
 
-<Card.Root>
-  <Card.Header>
-    <Card.Title>Timeline</Card.Title>
-    <Card.Description>Overview of attendance patterns.</Card.Description>
-  </Card.Header>
-  <Card.Content>
-    <Histogram />
-  </Card.Content>
-</Card.Root>
+<div class="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+  <Histogram />
+  <Metrics />
+</div>
