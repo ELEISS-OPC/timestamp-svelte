@@ -1,6 +1,11 @@
-export type ShiftSummary = {
-  date: string;
+export type DailyShifts = {
+  date: Date;
   shifts: number;
+};
+
+export type ShiftsSummary = {
+  reference_date: Date;
+  daily_shifts: DailyShifts[];
 };
 
 export type Metric = {
