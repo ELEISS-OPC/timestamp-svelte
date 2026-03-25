@@ -27,8 +27,6 @@
     data.daily_shifts.filter((item: DailyShifts) => {
       // eslint-disable-next-line svelte/prefer-svelte-reactivity
       const referenceDate = new Date(data.reference_date)
-        ? data.reference_date
-        : new Date(data.reference_date);
       let daysToSubtract = 90;
       if (timeRange === "30d") {
         daysToSubtract = 30;
@@ -36,7 +34,7 @@
         daysToSubtract = 7;
       }
       referenceDate.setDate(referenceDate.getDate() - daysToSubtract);
-      return new Date(item.date) >= referenceDate;
+      return item.date >= referenceDate;
     }),
   );
   const chartConfig = {
