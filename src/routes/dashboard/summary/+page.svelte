@@ -9,6 +9,6 @@
 <div class="@container/main flex flex-1 flex-col self-center">
   <div class="flex flex-col gap-4 md:gap-6">
     <ShiftSummary chartData={data.chartData} />
-    <Metrics />
+    <Metrics data={data.metricsSummary} />
   </div>
 </div>

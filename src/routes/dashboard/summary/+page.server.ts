@@ -95,5 +95,32 @@ export const load = (async () => {
       { date: new Date("2024-06-29"), shifts: 103 },
       { date: new Date("2024-06-30"), shifts: 446 },
     ],
+    metricsSummary: {
+      no_show_rate: {
+        value: 12.5,
+        isPercentage: true,
+        comment: "Trending up this month",
+        pctChange_1month: 5,
+      },
+      overtime_rate: {
+        value: 8.3,
+        isPercentage: true,
+        comment: "Overtime rate has decreased by 1.5% compared to last month.",
+        pctChange_1month: -1.5,
+      },
+      punctuality_rate: {
+        value: 95.2,
+        isPercentage: true,
+        comment: "Punctuality rate has improved by 3% compared to last month.",
+        pctChange_1month: 3,
+      },
+      average_bf_score: {
+        value: 4.2,
+        isPercentage: false,
+        comment:
+          "Average BF score has increased by 0.5 points compared to last month.",
+        pctChange_1month: 0.5,
+      },
+    },
   };
 }) satisfies PageServerLoad;
