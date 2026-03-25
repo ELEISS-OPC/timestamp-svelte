@@ -6,6 +6,7 @@
   import { scaleUtc } from "d3-scale";
   import { Area, AreaChart } from "layerchart";
   import { curveNatural } from "d3-shape";
+  import type { ShiftSummary } from "./types";
 
   const { chartData } = $props();
 
@@ -23,7 +24,7 @@
     }
   });
   const filteredData = $derived(
-    chartData.filter((item) => {
+    chartData.filter((item: ShiftSummary) => {
       // eslint-disable-next-line svelte/prefer-svelte-reactivity
       const referenceDate = new Date("2024-06-30");
       let daysToSubtract = 90;
@@ -33,7 +34,7 @@
         daysToSubtract = 7;
       }
       referenceDate.setDate(referenceDate.getDate() - daysToSubtract);
-      return item.date >= referenceDate;
+      return new Date(item.date) >= referenceDate;
     }),
   );
   const chartConfig = {
