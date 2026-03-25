@@ -45,7 +45,7 @@
         </Breadcrumb.Root>
       </div>
     </header>
-    <div class="px-8">
+    <div class="px-8 h-full w-full flex">
       {@render children()}
     </div>
   </Sidebar.Inset>
