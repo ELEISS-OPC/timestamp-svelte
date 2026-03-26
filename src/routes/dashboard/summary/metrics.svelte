@@ -3,9 +3,9 @@
   import TrendingUpIcon from "@lucide/svelte/icons/trending-up";
   import { Badge } from "$lib/components/ui/badge";
   import * as Card from "$lib/components/ui/card";
-  import type { MetricsSummary, Metric } from "./types";
+  import type { MedianMetricsSummary, Metric } from "./types";
 
-  const { data }: { data: MetricsSummary } = $props();
+  const { data }: { data: MedianMetricsSummary } = $props();
 </script>
 
 {#snippet TrendBadge(metric: Metric)}
@@ -85,16 +85,16 @@
   </Card.Root>
   <Card.Root class="@container/card">
     <Card.Header>
-      <Card.Description>Average BF Score</Card.Description>
+      <Card.Description>Bradford Score</Card.Description>
       <Card.Title
         class="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl"
       >
-        {@render MetricValue(data.average_bf_score)}
+        {@render MetricValue(data.bf_score)}
       </Card.Title>
-      {@render TrendBadge(data.average_bf_score)}
+      {@render TrendBadge(data.bf_score)}
     </Card.Header>
     <Card.Footer class="flex-col items-start gap-1.5 text-sm">
-      {@render TrendComment(data.average_bf_score)}
+      {@render TrendComment(data.bf_score)}
       <div class="text-muted-foreground">
         Punctuality rate for the last month
       </div>

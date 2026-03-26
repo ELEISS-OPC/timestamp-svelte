@@ -120,11 +120,11 @@ export const load = (async () => {
         comment: "Punctuality rate has improved by 3% compared to last month.",
         pctChange_1month: 3,
       },
-      average_bf_score: {
+      bf_score: {
         value: 4.2,
         isPercentage: false,
         comment:
-          "Average BF score has increased by 0.5 points compared to last month.",
+          "Median BF score has increased by 0.5 points compared to last month.",
         pctChange_1month: 0.5,
       },
     },

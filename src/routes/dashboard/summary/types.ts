@@ -18,9 +18,9 @@ export type Metric = {
   pctChange_1year?: number;
 };
 
-export type MetricsSummary = {
+export type MedianMetricsSummary = {
   no_show_rate: Metric;
   overtime_rate: Metric;
   punctuality_rate: Metric;
-  average_bf_score: Metric;
+  bf_score: Metric;
 };
