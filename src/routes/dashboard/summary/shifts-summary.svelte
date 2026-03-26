@@ -6,7 +6,7 @@
   import { scaleUtc } from "d3-scale";
   import { Area, AreaChart } from "layerchart";
   import { curveNatural } from "d3-shape";
-  import type { DailyShifts, ShiftsSummary } from "./types";
+  import type { DailyTotalShifts, ShiftsSummary } from "./types";
 
   let { data }: { data: ShiftsSummary } = $props();
 
@@ -24,7 +24,7 @@
     }
   });
   const filteredData = $derived(
-    data.daily_shifts.filter((item: DailyShifts) => {
+    data.daily_shifts.filter((item: DailyTotalShifts) => {
       // eslint-disable-next-line svelte/prefer-svelte-reactivity
       const referenceDate = new Date(data.reference_date)
       let daysToSubtract = 90;
