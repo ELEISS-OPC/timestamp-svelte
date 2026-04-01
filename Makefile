@@ -5,10 +5,15 @@ setup:
 	@npm install
 	@cp .local.dev.env.example .env
 
-# Runs the development environment
-# 	Usage: make dev
-.PHONY: dev
+## Run development server
+.PHONY: compose compose-down dev
+compose:
+	@docker compose --env-file .env -f docker-compose.local.dev.yml up --build -d
+compose-down:
+	@docker compose -f docker-compose.local.dev.yml down
 dev:
+	@make compose-down
+	@make compose
 	@npm run dev -- --host 0.0.0.0
 
 # Bump version
