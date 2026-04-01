@@ -4,6 +4,8 @@
   import { Camera, Trash2, SendHorizontal } from "@lucide/svelte/icons";
   import { cn } from "$utils";
   import { GetLocationWithAddress } from "$lib/geolocation";
+  import { goto } from "$app/navigation";
+  import ArrowLeft from "@lucide/svelte/icons/arrow-left";
 
   // Camera capture
   let video: HTMLVideoElement;
@@ -93,6 +95,10 @@
     if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height); // clear previous capture
     showCanvas = false;
   }
+
+  function goBack() {
+   goto("/dashboard"); // navigate back to dashboard
+  }
 </script>
 
 <div class="relative w-screen h-dvh bg-gray-100 overflow-hidden">
@@ -110,6 +116,12 @@
   >
     {formatTime(time)} - {timeZone}
   </div>
+
+  <!-- Back button -->
+  <Button class={cn(desktopControlsStyle, "left-5")} onclick={goBack}>
+    <ArrowLeft class="w-8 h-8" size={32} />
+    Back
+</Button>
 
   <!-- Geolocation overlay -->
   {#if latitude !== null && longitude !== null}
