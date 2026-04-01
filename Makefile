@@ -1,3 +1,10 @@
+.PHONY: setup
+# Sets up the development environment
+# 	Usage: make setup
+setup:
+	@npm install
+	@cp .local.dev.env.example .env
+
 # Runs the development environment
 # 	Usage: make dev
 .PHONY: dev
