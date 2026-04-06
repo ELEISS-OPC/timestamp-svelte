@@ -4,7 +4,9 @@ export type Employee = {
   middle_name: string | null;
   last_name: string;
   email: string;
+  role_id: number;
   avatar_url: string | null;
+  avatar_url_preview: string | null;
 };
 
 export interface dicebearOptions {
