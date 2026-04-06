@@ -6,11 +6,13 @@ setup:
 	@cp .local.dev.env.example .env
 
 ## Run development server
-.PHONY: compose compose-down dev
+.PHONY: compose compose-down compose-pull dev
 compose:
 	@docker compose --env-file .env -f docker-compose.local.dev.yml up --build -d
 compose-down:
 	@docker compose -f docker-compose.local.dev.yml down
+compose-pull:
+	@docker compose -f docker-compose.local.dev.yml pull
 dev:
 	@make compose-down
 	@make compose
