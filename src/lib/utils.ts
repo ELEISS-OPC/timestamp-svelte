@@ -1,5 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { OPTIONAL_USER_COOKIE_FIELDS, USER_COOKIE_FIELDS } from "./constants";
+import type { Employee } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -28,3 +30,45 @@ export function urlJoin(...parts: string[]) {
     .filter((part) => part.length > 0) // Remove empty parts
     .join("/");
 }
+
+export const setCookie = (
+  cookies: any,
+  name: string,
+  value: string,
+  options: any,
+) => {
+  const cookieOptions = {
+    path: "/",
+    httpOnly: true,
+    sameSite: "strict",
+  } as const;
+
+  cookies.set(name, value, { ...cookieOptions, ...options });
+};
+
+export const optionalSetCookie = (
+  cookies: any,
+  name: string,
+  value: string | null,
+  options: any = {},
+) => {
+  if (value) {
+    setCookie(cookies, name, value, options);
+  }
+};
+
+export const deleteCookie = (cookies: any, name: string) => {
+  cookies.delete(name, { path: "/" });
+};
+
+export const checkValidUserInfo = (userInfo: any) => {
+  USER_COOKIE_FIELDS.forEach((field) => {
+    if (OPTIONAL_USER_COOKIE_FIELDS.includes(field)) {
+      return;
+    }
+    if (userInfo[field as keyof Employee] === undefined) {
+      return false;
+    }
+  });
+  return true;
+};
