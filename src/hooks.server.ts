@@ -14,6 +14,11 @@ import {
 } from "$lib/utils";
 import { type Handle, redirect } from "@sveltejs/kit";
 
+const cookieOptions = {
+  maxAge: Number(COOKIE_EXPIRATION_MINUTES) * 60,
+  secure: MODE === "production",
+};
+
 export const handle: Handle = async ({ event, resolve }) => {
   const { cookies, url } = event;
   const isLoggingIn = url.pathname === "/login";
@@ -63,12 +68,14 @@ export const handle: Handle = async ({ event, resolve }) => {
       USER_COOKIE_FIELDS.forEach((field: string) => {
         const value = (userInfo as Employee)[field as keyof Employee];
         if (OPTIONAL_USER_COOKIE_FIELDS.includes(field)) {
-          optionalSetCookie(cookies, `user_info-${field}`, value as any);
+          optionalSetCookie(
+            cookies,
+            `user_info-${field}`,
+            value as any,
+            cookieOptions,
+          );
         } else {
-          setCookie(cookies, `user_info-${field}`, value as any, {
-            maxAge: Number(COOKIE_EXPIRATION_MINUTES) * 60,
-            secure: MODE === "production",
-          });
+          setCookie(cookies, `user_info-${field}`, value as any, cookieOptions);
         }
       });
     } catch (err) {

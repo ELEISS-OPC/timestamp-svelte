@@ -14,6 +14,11 @@ import { zod4 } from "sveltekit-superforms/adapters";
 import type { Actions, PageServerLoad } from "./$types.js";
 import { formSchema } from "./schema";
 
+const cookieOptions = {
+  maxAge: Number(COOKIE_EXPIRATION_MINUTES) * 60,
+  secure: MODE === "production",
+};
+
 export const load: PageServerLoad = async () => {
   return {
     form: await superValidate(zod4(formSchema)),
@@ -64,13 +69,15 @@ export const actions: Actions = {
         const value = userInfo[field as keyof Employee];
         if (OPTIONAL_USER_COOKIE_FIELDS.includes(field)) {
           if (value) {
-            optionalSetCookie(cookies, `user_info-${field}`, value as any);
+            optionalSetCookie(
+              cookies,
+              `user_info-${field}`,
+              value as any,
+              cookieOptions,
+            );
           }
         } else {
-          setCookie(cookies, `user_info-${field}`, value as any, {
-            maxAge: Number(COOKIE_EXPIRATION_MINUTES) * 60,
-            secure: MODE === "production",
-          });
+          setCookie(cookies, `user_info-${field}`, value as any, cookieOptions);
         }
       });
 
