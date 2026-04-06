@@ -2,19 +2,13 @@ import type { LayoutServerLoad } from "./$types";
 import dicebear from "$lib/api.dicebear";
 import type { Employee } from "$lib/types";
 
-export const load = (async () => {
-  // Sample data
-  const data: Employee = {
-    id: 1,
-    first_name: "Juan",
-    middle_name: null,
-    last_name: "Dela Cruz",
-    email: "juan.delacruz@infinetsolutionsph.com",
-    avatar_url: null,
-  };
+export const load = (async ({ locals }) => {
+  const data: Employee = locals.user;
 
   if (!data.avatar_url) {
-    data.avatar_url = await dicebear.getEmployeeAvatar(data);
+    const fallbackImg = await dicebear.getEmployeeAvatar(data);
+    data.avatar_url = fallbackImg;
+    data.avatar_url_preview = fallbackImg;
   }
 
   return data;
