@@ -37,10 +37,20 @@ export class InvalidCredentialsError extends APIError {
   }
 }
 
+export class UnauthorizedError extends APIError {
+  constructor(
+    message: string = "Unauthorized",
+    statusCode: number = STATUS.HTTP_401_UNAUTHORIZED,
+  ) {
+    super(message, statusCode);
+  }
+}
+
 const errors = {
   ServerError,
   UserNotFoundError,
   InvalidCredentialsError,
+  UnauthorizedError,
 };
 
 export default errors;
