@@ -36,11 +36,6 @@ export const actions: Actions = {
     try {
       const response = await API.login(form.data);
       access_token = response.access_token;
-
-      setCookie(cookies, "auth_token", access_token, {
-        maxAge: Number(COOKIE_EXPIRATION_MINUTES) * 60,
-        secure: MODE === "production",
-      });
     } catch (err) {
       if (err instanceof errors.InvalidCredentialsError) {
         return setError(form, "password", err.message, { status: 401 });
@@ -81,6 +76,10 @@ export const actions: Actions = {
             setCookie(cookies, `user_info-${field}`, value, cookieOptions);
           }
         }
+      });
+      setCookie(cookies, "auth_token", access_token, {
+        maxAge: Number(COOKIE_EXPIRATION_MINUTES) * 60,
+        secure: MODE === "production",
       });
 
       switch (userInfo.role_id) {
