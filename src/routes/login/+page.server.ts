@@ -62,19 +62,19 @@ export const actions: Actions = {
 
       USER_COOKIE_FIELDS.forEach((field: string) => {
         const value = userInfo[field as keyof Employee];
+        if (value === undefined || value === null) {
+          return; // Skip undefined or null values
+        }
+
         if (OPTIONAL_USER_COOKIE_FIELDS.includes(field)) {
-          if (value) {
-            optionalSetCookie(
-              cookies,
-              `user_info-${field}`,
-              value,
-              cookieOptions,
-            );
-          }
+          optionalSetCookie(
+            cookies,
+            `user_info-${field}`,
+            value,
+            cookieOptions,
+          );
         } else {
-          if (value) {
-            setCookie(cookies, `user_info-${field}`, value, cookieOptions);
-          }
+          setCookie(cookies, `user_info-${field}`, value, cookieOptions);
         }
       });
       setCookie(cookies, "auth_token", access_token, {
