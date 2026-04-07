@@ -77,7 +77,9 @@ export const actions: Actions = {
             );
           }
         } else {
-          setCookie(cookies, `user_info-${field}`, value, cookieOptions);
+          if (value) {
+            setCookie(cookies, `user_info-${field}`, value, cookieOptions);
+          }
         }
       });
 

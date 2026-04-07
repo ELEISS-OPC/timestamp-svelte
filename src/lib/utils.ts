@@ -35,7 +35,7 @@ export function urlJoin(...parts: string[]) {
 export const setCookie = (
   cookies: Cookies,
   name: string,
-  value: string,
+  value: string | number,
   options: CookieOptions = {},
 ) => {
   const cookieOptions = {
@@ -44,13 +44,13 @@ export const setCookie = (
     sameSite: "strict",
   } as const;
 
-  cookies.set(name, value, { ...cookieOptions, ...options });
+  cookies.set(name, String(value), { ...cookieOptions, ...options });
 };
 
 export const optionalSetCookie = (
   cookies: Cookies,
   name: string,
-  value: string | null,
+  value: string | number,
   options: CookieOptions = {},
 ) => {
   if (value) {
