@@ -19,6 +19,15 @@ const cookieOptions = {
   secure: MODE === "production",
 };
 
+const PUBLIC_PATHS = new Set(["/favicon.ico", "/robots.txt", "/manifest.json"]);
+const PUBLIC_FILE_PATTERN =
+  /\.(?:avif|css|gif|ico|jpe?g|js|json|map|png|svg|txt|webp|woff2?|ttf|eot)$/i;
+
+const isPublicAssetRequest = (pathname: string) =>
+  pathname.startsWith("/_app/") ||
+  PUBLIC_PATHS.has(pathname) ||
+  PUBLIC_FILE_PATTERN.test(pathname);
+
 export const handle: Handle = async ({ event, resolve }) => {
   const { cookies, url } = event;
   const isLoggingIn = url.pathname === "/login";
@@ -28,9 +37,10 @@ export const handle: Handle = async ({ event, resolve }) => {
     throw redirect(303, "/login");
   }
 
-  const isProtectedRoute = PROTECTED_ROUTES.some((route: string) =>
-    url.pathname.startsWith(route),
-  );
+  const isPublicRequest = isPublicAssetRequest(url.pathname);
+  const isProtectedRoute =
+    !isPublicRequest &&
+    PROTECTED_ROUTES.some((route: string) => url.pathname.startsWith(route));
 
   if (isProtectedRoute && !token) {
     // User is trying to access a private area without a token
