@@ -1,7 +1,8 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { OPTIONAL_USER_COOKIE_FIELDS, USER_COOKIE_FIELDS } from "./constants";
-import type { Employee } from "./types";
+import type { Employee, CookieOptions } from "./types";
+import { type Cookies } from "@sveltejs/kit";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -32,10 +33,10 @@ export function urlJoin(...parts: string[]) {
 }
 
 export const setCookie = (
-  cookies: any,
+  cookies: Cookies,
   name: string,
   value: string,
-  options: any,
+  options: CookieOptions = {},
 ) => {
   const cookieOptions = {
     path: "/",
@@ -47,17 +48,17 @@ export const setCookie = (
 };
 
 export const optionalSetCookie = (
-  cookies: any,
+  cookies: Cookies,
   name: string,
   value: string | null,
-  options: any = {},
+  options: CookieOptions = {},
 ) => {
   if (value) {
     setCookie(cookies, name, value, options);
   }
 };
 
-export const deleteCookie = (cookies: any, name: string) => {
+export const deleteCookie = (cookies: Cookies, name: string) => {
   cookies.delete(name, { path: "/" });
 };
 

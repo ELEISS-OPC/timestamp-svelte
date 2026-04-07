@@ -1,7 +1,8 @@
 import type { PageServerLoad } from "./$types";
 import { redirect } from "@sveltejs/kit";
+import { type Cookies } from "@sveltejs/kit";
 
-const deleteCookie = (cookies: any, name: string) => {
+const deleteCookie = (cookies: Cookies, name: string) => {
   cookies.delete(name, { path: "/" });
 };
 

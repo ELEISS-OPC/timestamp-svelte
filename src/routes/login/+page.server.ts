@@ -72,12 +72,12 @@ export const actions: Actions = {
             optionalSetCookie(
               cookies,
               `user_info-${field}`,
-              value as any,
+              value,
               cookieOptions,
             );
           }
         } else {
-          setCookie(cookies, `user_info-${field}`, value as any, cookieOptions);
+          setCookie(cookies, `user_info-${field}`, value, cookieOptions);
         }
       });
 

@@ -13,3 +13,12 @@ export interface dicebearOptions {
   scale?: number;
   style?: string;
 }
+
+export type CookieOptions = {
+  path?: string;
+  httpOnly?: boolean;
+  sameSite?: "strict" | "lax" | "none";
+  secure?: boolean;
+  maxAge?: number;
+  expires?: Date;
+};
