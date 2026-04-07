@@ -15,6 +15,7 @@
     type SuperValidated,
   } from "sveltekit-superforms";
   import { zod4Client } from "sveltekit-superforms/adapters";
+  import { Spinner } from "$components/ui/spinner";
   import { formSchema, type FormSchema } from "./schema";
 
   let {
@@ -30,9 +31,19 @@
   // svelte-ignore state_referenced_locally
   const form = superForm(data.form, {
     validators: zod4Client(formSchema),
+    onSubmit: () => {
+      loading = true;
+    },
+    onError: () => {
+      loading = false;
+    },
+    onResult: () => {
+      loading = false;
+    }
   });
 
   const { form: formData, enhance, errors } = form;
+  let loading: boolean = $state(false);
 </script>
 
 <div class={cn("flex flex-col gap-6", className)}>
@@ -82,7 +93,12 @@
             {/if}
           </Field>
           <Field>
-            <Button type="submit">Login</Button>
+            <Button type="submit" disabled={loading}>
+              {#if loading}
+                <Spinner />
+              {/if}
+              Login
+            </Button>
             <FieldDescription class="text-center">
               Don't have an account? <a href="##">Ask an officer for one</a>
             </FieldDescription>
