@@ -1,25 +1,11 @@
-import type { PageServerLoad } from "./$types";
+import { USER_COOKIE_FIELDS } from "$lib/constants";
+import { deleteCookie } from "$lib/utils";
 import { redirect } from "@sveltejs/kit";
-import { type Cookies } from "@sveltejs/kit";
-
-const deleteCookie = (cookies: Cookies, name: string) => {
-  cookies.delete(name, { path: "/" });
-};
-
-const userCookieFields = [
-  "id",
-  "first_name",
-  "middle_name",
-  "last_name",
-  "email",
-  "role_id",
-  "avatar_url",
-  "avatar_url_preview",
-];
+import type { PageServerLoad } from "./$types";
 
 export const load = (async ({ cookies }) => {
   deleteCookie(cookies, "auth_token");
-  userCookieFields.forEach((field) => {
+  USER_COOKIE_FIELDS.forEach((field) => {
     deleteCookie(cookies, `user_info-${field}`);
   });
   throw redirect(303, "/login");
