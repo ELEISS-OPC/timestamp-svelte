@@ -63,13 +63,13 @@ export const deleteCookie = (cookies: Cookies, name: string) => {
 };
 
 export const checkValidUserInfo = (userInfo: any) => {
-  USER_COOKIE_FIELDS.forEach((field) => {
+  for (const field of USER_COOKIE_FIELDS) {
     if (OPTIONAL_USER_COOKIE_FIELDS.includes(field)) {
-      return;
+      continue; // skip optional fields
     }
     if (userInfo[field as keyof Employee] === undefined) {
-      return false;
+      return false; // exit early if required field is missing
     }
-  });
+  }
   return true;
 };
