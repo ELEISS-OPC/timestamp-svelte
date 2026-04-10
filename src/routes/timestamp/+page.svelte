@@ -6,12 +6,13 @@
   import { GetLocationWithAddress } from "$lib/geolocation";
   import { goto } from "$app/navigation";
   import ArrowLeft from "@lucide/svelte/icons/arrow-left";
+  import EasyCamera from "@cloudparker/easy-camera-svelte";
 
   // Camera capture
-  let video: HTMLVideoElement;
-  let stream: MediaStream;
-  let canvas: HTMLCanvasElement;
-  let showCanvas = $state(false); // track if a capture has been taken
+  let width = $state(0); // capture full screen width
+  let camera: EasyCamera;
+  let mirrorDisplay = $state(true); // mirror video for user-friendly selfie view
+  let capturedImage: string | null = $state(null);
 
   // Time display
   let time = $state(new Date());
@@ -24,31 +25,27 @@
   let error: string | null = $state(null);
 
   // UI styles
-  const desktopControlsStyle = "absolute bottom-5 z-20 inline-flex hidden md:inline-flex";
+  const desktopControlsStyle =
+    "absolute bottom-5 z-20 inline-flex hidden md:inline-flex";
   const mobileControlsStyle =
     "absolute bottom-10 z-20 inline-flex rounded-full w-16 h-16 text-4xl md:hidden";
 
-  onMount(() => {
+  function handleResize() {
+    if (window) {
+      width = window.innerWidth;
+    }
+  }
 
+  onMount(() => {
     // Update time every second
     const interval = setInterval(() => {
       time = new Date();
     }, 1000);
 
-
-    // Access camera and stream to video element
-    (async () => {
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-        });
-        video.srcObject = stream;
-      } catch (err) {
-        console.error("Camera error:", err);
-      }
-    })();
-
-
+    // Handle window resize to update camera width
+    width = window.innerWidth || 0;
+    window.addEventListener("resize", handleResize);
+  
     // Get geolocation
     (async () => {
       try {
@@ -56,16 +53,15 @@
         latitude = location.latitude;
         longitude = location.longitude;
         address = location.address;
-
       } catch (err) {
         error = "Unable to retrieve location.";
         console.error("Geolocation error:", err);
       }
     })();
-  
+
     return () => {
       clearInterval(interval);
-      stream?.getTracks().forEach((track) => track.stop());
+      window.removeEventListener("resize", handleResize);
     };
   });
 
@@ -77,38 +73,29 @@
       timeZone: timeZone,
     });
 
-  function capture() {
-    // set canvas pixel dimensions to match video
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+  const capture = async () => {
+    let imageData = (await camera.captureImage()) as string; // capture image as base64 string
+    capturedImage = imageData;
+  };
 
-    const ctx = canvas.getContext("2d");
-    if (ctx) {
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    }
-
-    showCanvas = true; // show captured canvas
-  }
-
-  function removeCanvas() {
-    const ctx = canvas.getContext("2d");
-    if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height); // clear previous capture
-    showCanvas = false;
-  }
+  const retake = () => {
+    capturedImage = null;
+  };
 
   function goBack() {
-   goto("/dashboard"); // navigate back to dashboard
+    goto("/dashboard"); // navigate back to dashboard
   }
 </script>
 
 <div class="relative w-screen h-dvh bg-gray-100 overflow-hidden">
   <!-- Video fills the screen -->
-  <video
-    bind:this={video}
-    autoplay
-    playsinline
-    class="absolute top-0 left-0 w-screen h-dvh object-cover"
-  ></video>
+  <EasyCamera
+    bind:width
+    style="inset:0;"
+    bind:this={camera}
+    autoOpen
+    bind:mirrorDisplay
+  />
 
   <!-- Time overlay -->
   <div
@@ -121,7 +108,7 @@
   <Button class={cn(desktopControlsStyle, "left-5")} onclick={goBack}>
     <ArrowLeft class="w-8 h-8" size={32} />
     Back
-</Button>
+  </Button>
 
   <!-- Geolocation overlay -->
   {#if latitude !== null && longitude !== null}
@@ -133,7 +120,7 @@
   {/if}
 
   <!-- Capture / retake button -->
-  {#if !showCanvas}
+  {#if !capturedImage}
     <!-- Desktop capture button -->
     <Button class={cn(desktopControlsStyle, "right-5")} onclick={capture}>
       <Camera class="w-8 h-8" size={32} />
@@ -153,12 +140,12 @@
     <Button
       variant="outline"
       class={cn(desktopControlsStyle, "left-5")}
-      onclick={removeCanvas}
+      onclick={retake}
     >
       <Trash2 class="w-4 h-4" />
       Take another photo
     </Button>
-    <Button class={cn(desktopControlsStyle, "right-5")} onclick={removeCanvas}>
+    <Button class={cn(desktopControlsStyle, "right-5")}>
       <SendHorizontal class="w-4 h-4" />
       Submit
     </Button>
@@ -167,7 +154,7 @@
     <Button
       variant="outline"
       class={cn(mobileControlsStyle, "right-1/2 translate-x-[-150%]")}
-      onclick={removeCanvas}
+      onclick={retake}
     >
       <Trash2 class="w-4 h-4" />
     </Button>
@@ -176,9 +163,14 @@
     </Button>
   {/if}
 
-  <!-- Canvas overlay -->
-  <canvas
-    bind:this={canvas}
-    class="absolute top-1/2 left-1/2 z-10 translate-x-[-50%] translate-y-[-50%] w-screen h-dvh object-cover"
-  ></canvas>
+  <!-- Captured image overlay -->
+  {#if capturedImage}
+    <div class="absolute inset-0 z-10">
+      <img
+        src={capturedImage}
+        alt="Captured reference"
+        class="w-full h-full object-cover"
+      />
+    </div>
+  {/if}
 </div>
