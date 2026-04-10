@@ -73,3 +73,17 @@ export const checkValidUserInfo = (userInfo: any) => {
   }
   return true;
 };
+
+/**
+ * Removes the metadata prefix from a data URI string and returns only the payload.
+ *
+ * Example input: "data:image/png;base64,iVBORw0KGgo..."
+ * Example output: "iVBORw0KGgo..."
+ *
+ * If the input does not follow the expected data URI format, the original string is returned.
+ */
+export const removeDataURIBase64Prefix = (dataURI: string) => {
+  const separator = "base64,";
+  const data = dataURI.split(separator);
+  return data.length > 1 ? data[1] : dataURI; // Return the base64 data or original if it doesn't have the expected format
+};
