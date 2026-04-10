@@ -55,12 +55,22 @@ export class BadRequestError extends APIError {
   }
 }
 
+export class UnprocessableContentError extends APIError {
+  constructor(
+    message: string = "Unprocessable Content",
+    statusCode: number = STATUS.HTTP_422_UNPROCESSABLE_CONTENT,
+  ) {
+    super(message, statusCode);
+  }
+}
+
 const errors = {
   ServerError,
   UserNotFoundError,
   InvalidCredentialsError,
   UnauthorizedError,
-  BadRequestError
+  BadRequestError,
+  UnprocessableContentError,
 };
 
 export default errors;

@@ -101,6 +101,7 @@ export async function upload_image_base64(token: string, imageData: string) {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
     },
     body: JSON.stringify({ image: imageData }),
   });
@@ -116,6 +117,12 @@ export async function upload_image_base64(token: string, imageData: string) {
         throw new errors.UnauthorizedError(
           "You are not authorized to perform this action.",
           STATUS.HTTP_401_UNAUTHORIZED,
+        );
+      case STATUS.HTTP_422_UNPROCESSABLE_CONTENT:
+        console.log(response)
+        throw new errors.UnprocessableContentError(
+          "The image data could not be processed.",
+          STATUS.HTTP_422_UNPROCESSABLE_CONTENT,
         );
       case STATUS.HTTP_500_INTERNAL_SERVER_ERROR:
         throw new errors.ServerError(
