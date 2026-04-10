@@ -1,7 +1,7 @@
 import API from "$lib/api.backend";
 import errors from "$lib/errors";
 import { removeDataURIBase64Prefix } from "$utils";
-import { fail } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import { message, setError, superValidate } from "sveltekit-superforms";
 import { zod4 } from "sveltekit-superforms/adapters";
 import type { Actions, PageServerLoad } from "./$types";
@@ -47,9 +47,7 @@ export const actions: Actions = {
         return message(form, "The data provided is invalid.", { status: 400 });
       }
       if (err instanceof errors.UnauthorizedError) {
-        return message(form, "Your session has expired. Please log in again.", {
-          status: 401,
-        });
+        return redirect(303, "/logout");
       }
       if (err instanceof errors.ServerError) {
         return message(
