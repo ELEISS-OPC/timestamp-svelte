@@ -96,9 +96,99 @@ export async function get_my_info(token: string) {
   return await response.json();
 }
 
+export async function upload_image_base64(token: string, imageData: string) {
+  const response = await fetch(urlJoin(BACKEND_URL, "/image/base64"), {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ image: imageData }),
+  });
+
+  if (!response.ok) {
+    switch (response.status) {
+      case STATUS.HTTP_400_BAD_REQUEST:
+        throw new errors.BadRequestError(
+          "The image data provided is invalid.",
+          STATUS.HTTP_400_BAD_REQUEST,
+        );
+      case STATUS.HTTP_401_UNAUTHORIZED:
+        throw new errors.UnauthorizedError(
+          "You are not authorized to perform this action.",
+          STATUS.HTTP_401_UNAUTHORIZED,
+        );
+      case STATUS.HTTP_500_INTERNAL_SERVER_ERROR:
+        throw new errors.ServerError(
+          "Something went wrong on the server.",
+          STATUS.HTTP_500_INTERNAL_SERVER_ERROR,
+        );
+      default:
+        throw new Error(
+          `Failed to upload image with status: ${response.status}`,
+        );
+    }
+  }
+
+  return await response.json();
+}
+
+export async function time_in(
+  token: string,
+  data: {
+    user_id: number;
+    latitude: number;
+    longitude: number;
+    selfie: string;
+    selfie_preview: string;
+  },
+) {
+  const response = await fetch(urlJoin(BACKEND_URL, "/timestamp/time-in"), {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      user_id: data.user_id,
+      coordinates: {
+        latitude: data.latitude,
+        longitude: data.longitude,
+      },
+      selfie: data.selfie, // URL from the image upload response
+      selfie_preview: data.selfie_preview, // URL from the image upload response
+    }),
+  });
+
+  if (!response.ok) {
+    switch (response.status) {
+      case STATUS.HTTP_400_BAD_REQUEST:
+        throw new errors.BadRequestError(
+          "The data provided is invalid.",
+          STATUS.HTTP_400_BAD_REQUEST,
+        );
+      case STATUS.HTTP_401_UNAUTHORIZED:
+        throw new errors.UnauthorizedError(
+          "You are not authorized to perform this action.",
+          STATUS.HTTP_401_UNAUTHORIZED,
+        );
+      case STATUS.HTTP_500_INTERNAL_SERVER_ERROR:
+        throw new errors.ServerError(
+          "Something went wrong on the server.",
+          STATUS.HTTP_500_INTERNAL_SERVER_ERROR,
+        );
+      default:
+        throw new Error(`Failed to time in with status: ${response.status}`);
+    }
+  }
+
+  return await response.json();
+}
+
 const API = {
   login,
   get_my_info,
+  upload_image_base64,
+  time_in,
 };
 
 export default API;

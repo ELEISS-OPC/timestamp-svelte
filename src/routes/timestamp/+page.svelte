@@ -7,21 +7,34 @@
   import { goto } from "$app/navigation";
   import ArrowLeft from "@lucide/svelte/icons/arrow-left";
   import EasyCamera from "@cloudparker/easy-camera-svelte";
+  import type { Employee } from "$lib/types";
+  import {
+    type Infer,
+    superForm,
+    type SuperValidated,
+  } from "sveltekit-superforms";
+  import { zod4Client } from "sveltekit-superforms/adapters";
+  import { formSchema, type FormSchema } from "./schema";
+
+  let {
+    data,
+  }: { data: { user: Employee; form: SuperValidated<Infer<FormSchema>> } } =
+    $props();
 
   // Camera capture
   let width = $state(0); // capture full screen width
   let camera: EasyCamera;
   let mirrorDisplay = $state(true); // mirror video for user-friendly selfie view
-  let capturedImage: string | null = $state(null);
+  let capturedImage: string = $state(""); // base64 string of captured image
 
   // Time display
   let time = $state(new Date());
   const timeZone = "Asia/Manila";
 
   // Geolocation
-  let latitude: number | null = $state(null);
-  let longitude: number | null = $state(null);
-  let address: string | null = $state(null);
+  let latitude: number | null = $state(0);
+  let longitude: number | null = $state(0);
+  let address: string | null = $state("");
   let error: string | null = $state(null);
 
   // UI styles
@@ -45,7 +58,7 @@
     // Handle window resize to update camera width
     width = window.innerWidth || 0;
     window.addEventListener("resize", handleResize);
-  
+
     // Get geolocation
     (async () => {
       try {
@@ -79,12 +92,19 @@
   };
 
   const retake = () => {
-    capturedImage = null;
+    capturedImage = "";
   };
 
   function goBack() {
     goto("/dashboard"); // navigate back to dashboard
   }
+
+  // svelte-ignore state_referenced_locally
+  const form = superForm(data.form, {
+    validators: zod4Client(formSchema),
+    onResult: retake, // reset captured image after successful submission
+  });
+  const { enhance, errors } = form;
 </script>
 
 <div class="relative w-screen h-dvh bg-gray-100 overflow-hidden">
@@ -120,49 +140,64 @@
     </div>
   {/if}
 
+  <form method="POST" use:enhance action="?/time_in">
   <!-- Capture / retake button -->
-  {#if !capturedImage}
-    <!-- Desktop capture button -->
-    <Button class={cn(desktopControlsStyle, "right-5")} onclick={capture}>
-      <Camera class="w-8 h-8" size={32} />
+  <input type="hidden" name="user_id" value={data.user.id} />
+  <input type="hidden" name="latitude" bind:value={latitude} />
+    <input type="hidden" name="longitude" bind:value={longitude} />
+    <input type="hidden" name="selfie" bind:value={capturedImage} />
+    {#if !capturedImage}
+      <!-- Desktop capture button -->
+      <Button
+        class={cn(desktopControlsStyle, "right-5")}
+        onclick={capture}
+        type="button"
+      >
+        <Camera class="w-8 h-8" size={32} />
+        Time in
+      </Button>
 
-      Time in
-    </Button>
+      <!-- Mobile capture button -->
+      <Button
+        class={cn(mobileControlsStyle, "translate-x-1/2 right-1/2")}
+        onclick={capture}
+        type="button"
+      >
+        <Camera class="w-8 h-8" />
+      </Button>
+    {:else}
+      <!-- Desktop Controls -->
+      <Button
+        variant="outline"
+        class={cn(desktopControlsStyle, "left-5")}
+        onclick={retake}
+        type="button"
+      >
+        <Trash2 class="w-4 h-4" />
+        Take another photo
+      </Button>
+      <Button class={cn(desktopControlsStyle, "right-5")} type="submit">
+        <SendHorizontal class="w-4 h-4" />
+        Submit
+      </Button>
 
-    <!-- Mobile capture button -->
-    <Button
-      class={cn(mobileControlsStyle, "translate-x-1/2 right-1/2")}
-      onclick={capture}
-    >
-      <Camera class="w-8 h-8" />
-    </Button>
-  {:else}
-    <!-- Desktop Controls -->
-    <Button
-      variant="outline"
-      class={cn(desktopControlsStyle, "left-5")}
-      onclick={retake}
-    >
-      <Trash2 class="w-4 h-4" />
-      Take another photo
-    </Button>
-    <Button class={cn(desktopControlsStyle, "right-5")}>
-      <SendHorizontal class="w-4 h-4" />
-      Submit
-    </Button>
-
-    <!-- Mobile Controls -->
-    <Button
-      variant="outline"
-      class={cn(mobileControlsStyle, "right-1/2 translate-x-[-150%]")}
-      onclick={retake}
-    >
-      <Trash2 class="w-4 h-4" />
-    </Button>
-    <Button class={cn(mobileControlsStyle, "left-1/2 translate-x-[150%]")}>
-      <SendHorizontal class="w-4 h-4" />
-    </Button>
-  {/if}
+      <!-- Mobile Controls -->
+      <Button
+        variant="outline"
+        class={cn(mobileControlsStyle, "right-1/2 translate-x-[-150%]")}
+        onclick={retake}
+        type="button"
+      >
+        <Trash2 class="w-4 h-4" />
+      </Button>
+      <Button
+        class={cn(mobileControlsStyle, "left-1/2 translate-x-[150%]")}
+        type="submit"
+      >
+        <SendHorizontal class="w-4 h-4" />
+      </Button>
+    {/if}
+  </form>
 
   <!-- Captured image overlay -->
   {#if capturedImage}
