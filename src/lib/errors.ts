@@ -64,6 +64,15 @@ export class UnprocessableContentError extends APIError {
   }
 }
 
+export class InvalidImageError extends APIError {
+  constructor(
+    message: string = "Invalid image format or content",
+    statusCode: number = STATUS.HTTP_400_BAD_REQUEST,
+  ) {
+    super(message, statusCode);
+  }
+}
+
 const errors = {
   ServerError,
   UserNotFoundError,
@@ -71,6 +80,7 @@ const errors = {
   UnauthorizedError,
   BadRequestError,
   UnprocessableContentError,
+  InvalidImageError,
 };
 
 export default errors;
