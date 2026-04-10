@@ -95,6 +95,7 @@
     bind:this={camera}
     autoOpen
     bind:mirrorDisplay
+    useAudio={false}
   />
 
   <!-- Time overlay -->
