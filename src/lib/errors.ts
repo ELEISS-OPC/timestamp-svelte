@@ -46,11 +46,21 @@ export class UnauthorizedError extends APIError {
   }
 }
 
+export class BadRequestError extends APIError {
+  constructor(
+    message: string = "Bad Request",
+    statusCode: number = STATUS.HTTP_400_BAD_REQUEST,
+  ) {
+    super(message, statusCode);
+  }
+}
+
 const errors = {
   ServerError,
   UserNotFoundError,
   InvalidCredentialsError,
   UnauthorizedError,
+  BadRequestError
 };
 
 export default errors;
