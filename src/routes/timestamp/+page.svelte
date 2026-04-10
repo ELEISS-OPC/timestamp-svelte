@@ -140,32 +140,32 @@
     </div>
   {/if}
 
-  <form method="POST" use:enhance action="?/time_in">
   <!-- Capture / retake button -->
-  <input type="hidden" name="user_id" value={data.user.id} />
-  <input type="hidden" name="latitude" bind:value={latitude} />
-    <input type="hidden" name="longitude" bind:value={longitude} />
-    <input type="hidden" name="selfie" bind:value={capturedImage} />
-    {#if !capturedImage}
-      <!-- Desktop capture button -->
-      <Button
-        class={cn(desktopControlsStyle, "right-5")}
-        onclick={capture}
-        type="button"
-      >
-        <Camera class="w-8 h-8" size={32} />
-        Time in
-      </Button>
+  {#if !capturedImage}
+    <!-- Desktop capture button -->
+    <Button
+      class={cn(desktopControlsStyle, "right-5")}
+      onclick={capture}
+      type="button"
+    >
+      <Camera class="w-8 h-8" size={32} />
+      Time in
+    </Button>
 
-      <!-- Mobile capture button -->
-      <Button
-        class={cn(mobileControlsStyle, "translate-x-1/2 right-1/2")}
-        onclick={capture}
-        type="button"
-      >
-        <Camera class="w-8 h-8" />
-      </Button>
-    {:else}
+    <!-- Mobile capture button -->
+    <Button
+      class={cn(mobileControlsStyle, "translate-x-1/2 right-1/2")}
+      onclick={capture}
+      type="button"
+    >
+      <Camera class="w-8 h-8" />
+    </Button>
+  {:else}
+    <form method="POST" use:enhance action="?/time_in">
+      <input type="hidden" name="user_id" value={data.user.id} />
+      <input type="hidden" name="latitude" bind:value={latitude} />
+      <input type="hidden" name="longitude" bind:value={longitude} />
+      <input type="hidden" name="selfie" bind:value={capturedImage} />
       <!-- Desktop Controls -->
       <Button
         variant="outline"
@@ -187,8 +187,7 @@
         class={cn(mobileControlsStyle, "right-1/2 translate-x-[-150%]")}
         onclick={retake}
         type="button"
-      >
-        <Trash2 class="w-4 h-4" />
+        ><Trash2 class="w-4 h-4" />
       </Button>
       <Button
         class={cn(mobileControlsStyle, "left-1/2 translate-x-[150%]")}
@@ -196,10 +195,10 @@
       >
         <SendHorizontal class="w-4 h-4" />
       </Button>
-    {/if}
-  </form>
+    </form>
+  {/if}
 
-  <!-- Captured image overlay -->
+  <!-- Captured image overlay
   {#if capturedImage}
     <div class="absolute inset-0 z-10">
       <img
@@ -208,5 +207,23 @@
         class="w-full h-full object-cover"
       />
     </div>
-  {/if}
+  {/if} -->
+
+  <!-- {@render errMessage($errors.selfie)} -->
+  <!-- {@render errMessage($errors.latitude)} -->
+  <!-- {@render errMessage($errors.longitude)} -->
+  {@render errMessage("Test")}
+
 </div>
+
+{#snippet errMessage(message: string)}
+  {#if message}
+    <div class="rounded-md bg-red-500 p-4 absolute z-30 w-20 h-20">
+      <div class="flex">
+        <div class="ml-3">
+          <p class="text-sm font-medium text-red-800">{message}</p>
+        </div>
+      </div>
+    </div>
+  {/if}
+{/snippet}
