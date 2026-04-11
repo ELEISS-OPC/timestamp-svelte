@@ -22,6 +22,7 @@
   import TimestampButton from "./timestamp-btn.svelte";
   import BackButton from "./back-btn.svelte";
   import { toTitleCase } from "layerchart/utils/string";
+  import { getGreeting } from "$utils";
 
   let {
     data,
@@ -85,11 +86,11 @@
         toast.dismiss(loadingSonnerID);
         if (isTimedIn) {
           toast.success(
-            `Good work today, ${toTitleCase(data.user.first_name)}!`,
+            getGreeting("timeOut", data.user.first_name),
             successSonnerOptions,
           );
         } else {
-          toast.success(`Have a productive day, ${toTitleCase(data.user.first_name)}!`, successSonnerOptions);
+          toast.success(getGreeting("timeIn", data.user.first_name), successSonnerOptions);
         }
         isTimedIn = !isTimedIn;
       } else if (result.type === "error") {
