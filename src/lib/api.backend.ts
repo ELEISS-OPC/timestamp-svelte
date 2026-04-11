@@ -167,10 +167,17 @@ export async function time_in(
   });
 
   if (!response.ok) {
+    const data = await response.json();
     switch (response.status) {
       case STATUS.HTTP_400_BAD_REQUEST:
+        if ((data.detail as string).includes("already timed in")) {
+          throw new errors.AlreadyTimedInError(
+            "You have already timed in for today.",
+            STATUS.HTTP_400_BAD_REQUEST,
+          );
+        }
         throw new errors.BadRequestError(
-          "The data provided is invalid.",
+          "Something is wrong with this request.",
           STATUS.HTTP_400_BAD_REQUEST,
         );
       case STATUS.HTTP_401_UNAUTHORIZED:
