@@ -139,6 +139,41 @@ export async function upload_image_base64(token: string, imageData: string) {
   return await response.json();
 }
 
+export async function timestamp_status(token: string, user_id: number) {
+  const response = await fetch(urlJoin(BACKEND_URL, `/timestamp/current-status/${user_id}`), {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    switch (response.status) {
+      case STATUS.HTTP_401_UNAUTHORIZED:
+        throw new errors.UnauthorizedError(
+          "You are not authorized to access this resource.",
+          STATUS.HTTP_401_UNAUTHORIZED,
+        );
+      case STATUS.HTTP_404_NOT_FOUND:
+        throw new errors.UserNotFoundError(
+          "User information could not be found.",
+          STATUS.HTTP_404_NOT_FOUND,
+        );
+      case STATUS.HTTP_500_INTERNAL_SERVER_ERROR:
+        throw new errors.ServerError(
+          "Something went wrong on the server.",
+          STATUS.HTTP_500_INTERNAL_SERVER_ERROR,
+        );
+      default:
+        throw new Error(
+          `Failed to fetch timestamp status with status: ${response.status}`,
+        );
+    }
+  }
+
+  return await response.json();
+}
+
+
 export async function time_in(
   token: string,
   data: {
@@ -203,6 +238,7 @@ const API = {
   get_my_info,
   upload_image_base64,
   time_in,
+  timestamp_status,
 };
 
 export default API;
