@@ -1,45 +1,59 @@
 import API from "$lib/api.backend";
 import errors from "$lib/errors";
-import { removeDataURIBase64Prefix } from "$utils";
-import { fail, redirect } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 import { message, setError, superValidate } from "sveltekit-superforms";
 import { zod4 } from "sveltekit-superforms/adapters";
 import type { Actions, PageServerLoad } from "./$types";
 import { formSchema } from "./schema";
+import { TimestampStatus } from "$lib/enums";
 
-export const load: PageServerLoad = async ({ locals }) => {
-  return {
-    user: locals.user,
-    form: await superValidate(zod4(formSchema)),
-  };
+export const load: PageServerLoad = async ({ locals, cookies }) => {
+  const access_token = cookies.get("auth_token") || "";
+
+  try {
+    const data = await API.timestamp_status(access_token, locals.user.id);
+    return {
+      user: locals.user,
+      form: await superValidate(zod4(formSchema)),
+      user_timestamp_status: data.status as TimestampStatus,
+    };
+  } catch (err) {
+    if (err instanceof errors.UnauthorizedError) {
+      return redirect(303, "/logout");
+    }
+  }
 };
 
 export const actions: Actions = {
   time_in: async (event) => {
-    console.log("Time In action triggered");
     const form = await superValidate(event, zod4(formSchema));
     const { cookies } = event;
-    const access_token: string = cookies.get("auth_token")!;
-    if (!form.valid) return fail(400, { form });
+    const access_token: string = cookies.get("auth_token") || "";
+    if (!form.valid)
+      return message(form, "Please correct the errors in the form.", {
+        status: 400,
+      });
 
     try {
       const imageUploadResponse = await API.upload_image_base64(
         access_token,
-        removeDataURIBase64Prefix(form.data.selfie),
+        form.data.selfie,
       );
       const timeInResponse = await API.time_in(access_token, {
         user_id: form.data.user_id,
         latitude: form.data.latitude,
         longitude: form.data.longitude,
-        selfie: imageUploadResponse.image_url,
-        selfie_preview: imageUploadResponse.preview_url,
+        selfie: imageUploadResponse.original,
+        selfie_preview: imageUploadResponse.preview,
       });
 
-      return timeInResponse.time_in; // Return the time_in timestamp
+      return { form, timeInResponse };
     } catch (err) {
-      console.error("Image upload failed:", err);
-      console.error("Image upload failed:");
-
+      if (err instanceof errors.AlreadyTimedInError) {
+        return message(form, "You have already timed in for today.", {
+          status: 400,
+        });
+      }
       if (err instanceof errors.InvalidImageError) {
         return setError(form, "selfie", err.message, { status: 400 });
       }
@@ -59,10 +73,72 @@ export const actions: Actions = {
         );
       }
 
-      console.error("Unexpected Image Upload Error:", err);
+      console.error("Unexpected error during time in:", err);
+
       return message(
         form,
-        "An unexpected error occurred during image upload.",
+        "An unexpected error occurred.",
+        {
+          status: 500,
+        },
+      );
+    }
+  },
+  time_out: async (event) => {
+    const form = await superValidate(event, zod4(formSchema));
+    const { cookies } = event;
+    const access_token: string = cookies.get("auth_token") || "";
+    if (!form.valid)
+      return message(form, "Please correct the errors in the form.", {
+        status: 400,
+      });
+
+    try {
+      const imageUploadResponse = await API.upload_image_base64(
+        access_token,
+        form.data.selfie,
+      );
+      const timeOutResponse = await API.time_out(access_token, {
+        user_id: form.data.user_id,
+        latitude: form.data.latitude,
+        longitude: form.data.longitude,
+        selfie: imageUploadResponse.original,
+        selfie_preview: imageUploadResponse.preview,
+      });
+      console.log("Time out response:", timeOutResponse);
+
+      return { form, timeOutResponse };
+    } catch (err) {
+      if (err instanceof errors.AlreadyTimedOutError) {
+        return message(form, "You have already timed out for today.", {
+          status: 400,
+        });
+      }
+      if (err instanceof errors.InvalidImageError) {
+        return setError(form, "selfie", err.message, { status: 400 });
+      }
+      if (err instanceof errors.BadRequestError) {
+        return message(form, "The data provided is invalid.", { status: 400 });
+      }
+      if (err instanceof errors.UnauthorizedError) {
+        return redirect(303, "/logout");
+      }
+      if (err instanceof errors.ServerError) {
+        return message(
+          form,
+          "Our servers are having a moment. Please try again later.",
+          {
+            status: 500,
+          },
+        );
+      }
+
+      console.error("Unexpected error during time out:", err);
+
+
+      return message(
+        form,
+        "An unexpected error occurred.",
         {
           status: 500,
         },
