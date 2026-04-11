@@ -73,6 +73,15 @@ export class InvalidImageError extends APIError {
   }
 }
 
+export class AlreadyTimedInError extends APIError {
+  constructor(
+    message: string = "User has already timed in",
+    statusCode: number = STATUS.HTTP_400_BAD_REQUEST,
+  ) {
+    super(message, statusCode);
+  }
+}
+
 const errors = {
   ServerError,
   UserNotFoundError,
@@ -81,6 +90,7 @@ const errors = {
   BadRequestError,
   UnprocessableContentError,
   InvalidImageError,
+  AlreadyTimedInError,
 };
 
 export default errors;
