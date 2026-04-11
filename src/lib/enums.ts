@@ -3,3 +3,8 @@ export enum Role {
   Officer = 2,
   Admin = 3,
 }
+
+export enum TimestampStatus {
+  TIMED_IN = "timed_in",
+  TIMED_OUT = "timed_out",
+}
