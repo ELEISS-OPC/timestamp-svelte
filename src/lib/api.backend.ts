@@ -244,7 +244,7 @@ export async function time_out(
   },
 ) {
   const response = await fetch(urlJoin(BACKEND_URL, "/timestamp/time-out"), {
-    method: "POST",
+    method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
