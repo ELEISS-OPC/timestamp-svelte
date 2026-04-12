@@ -92,20 +92,12 @@
       >
         {#snippet marks({ context })}
           <defs>
-            <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="fillShifts" x1="0" y1="0" x2="0" y2="1">
               <stop
                 offset="5%"
                 stop-color="var(--color-shifts)"
                 stop-opacity={1.0}
               />
-              <stop
-                offset="95%"
-                stop-color="var(--color-shifts)"
-                stop-opacity={0.1}
-              />
-            </linearGradient>
-            <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stop-color="var(--color-shifts)" stop-opacity={0.8} />
               <stop
                 offset="95%"
                 stop-color="var(--color-shifts)"
@@ -127,9 +119,7 @@
                 line={{ class: "stroke-1" }}
                 motion="tween"
                 {...s.props}
-                fill={s.key === "desktop"
-                  ? "url(#fillDesktop)"
-                  : "url(#fillMobile)"}
+                fill={"url(#fillShifts)"}
               />
             {/each}
           </ChartClipPath>
