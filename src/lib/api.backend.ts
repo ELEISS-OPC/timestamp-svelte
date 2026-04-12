@@ -285,7 +285,7 @@ export async function time_out(
           STATUS.HTTP_500_INTERNAL_SERVER_ERROR,
         );
       default:
-        throw new Error(`Failed to time in with status: ${response.status}`);
+        throw new Error(`Failed to time out with status: ${response.status}`);
     }
   }
 
