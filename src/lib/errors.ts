@@ -46,11 +46,61 @@ export class UnauthorizedError extends APIError {
   }
 }
 
+export class BadRequestError extends APIError {
+  constructor(
+    message: string = "Bad Request",
+    statusCode: number = STATUS.HTTP_400_BAD_REQUEST,
+  ) {
+    super(message, statusCode);
+  }
+}
+
+export class UnprocessableContentError extends APIError {
+  constructor(
+    message: string = "Unprocessable Content",
+    statusCode: number = STATUS.HTTP_422_UNPROCESSABLE_CONTENT,
+  ) {
+    super(message, statusCode);
+  }
+}
+
+export class InvalidImageError extends APIError {
+  constructor(
+    message: string = "Invalid image format or content",
+    statusCode: number = STATUS.HTTP_400_BAD_REQUEST,
+  ) {
+    super(message, statusCode);
+  }
+}
+
+export class AlreadyTimedInError extends APIError {
+  constructor(
+    message: string = "User has already timed in",
+    statusCode: number = STATUS.HTTP_400_BAD_REQUEST,
+  ) {
+    super(message, statusCode);
+  }
+}
+
+export class AlreadyTimedOutError extends APIError {
+  constructor(
+    message: string = "User has already timed out",
+    statusCode: number = STATUS.HTTP_400_BAD_REQUEST,
+  ) {
+    super(message, statusCode);
+  }
+}
+
 const errors = {
   ServerError,
   UserNotFoundError,
   InvalidCredentialsError,
   UnauthorizedError,
+  BadRequestError,
+  UnprocessableContentError,
+  InvalidImageError,
+  AlreadyTimedInError,
+  AlreadyTimedOutError,
 };
 
 export default errors;

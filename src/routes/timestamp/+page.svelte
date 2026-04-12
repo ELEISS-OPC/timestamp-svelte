@@ -1,53 +1,119 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { Button } from "$components/ui/button";
-  import { Camera, Trash2, SendHorizontal } from "@lucide/svelte/icons";
-  import { cn } from "$utils";
   import { GetLocationWithAddress } from "$lib/geolocation";
-  import { goto } from "$app/navigation";
-  import ArrowLeft from "@lucide/svelte/icons/arrow-left";
+  import type { Employee } from "$lib/types";
+  import { removeDataURIBase64Prefix } from "$utils";
+  import EasyCamera from "@cloudparker/easy-camera-svelte";
+  import { onMount } from "svelte";
+  import { toast } from "svelte-sonner";
+  import {
+    type Infer,
+    superForm,
+    type SuperValidated,
+  } from "sveltekit-superforms";
+  import { zod4Client } from "sveltekit-superforms/adapters";
+  import { formSchema, type FormSchema } from "./schema";
+  import { TimestampStatus } from "$lib/enums";
+  import { SonnerStyle } from "$lib/constants";
+
+  import ImageOverlay from "./image-overlay.svelte";
+  import InfoOverlay from "./info-overlay.svelte";
+  import RetakeButton from "./retake-btn.svelte";
+  import SubmitButton from "./submit-btn.svelte";
+  import TimestampButton from "./timestamp-btn.svelte";
+  import BackButton from "./back-btn.svelte";
+  import { getGreeting } from "$utils";
+
+  let {
+    data,
+  }: {
+    data: {
+      user: Employee;
+      form: SuperValidated<Infer<FormSchema>>;
+      user_timestamp_status: TimestampStatus;
+    };
+  } = $props();
+
+  // Is the user currently timed in or out?
+  // This will determine the button text and API endpoint used.
+  // Updated on mount and after each successful time in/out action.
+  let isTimedIn = $state(false);
+
+  let loadingSonnerID: string | number = $state("");
+  const sonnerPlacement = "top-center";
+  const successSonnerOptions = {
+    position: sonnerPlacement,
+    style: SonnerStyle.success,
+  } as const;
+  const errorSonnerOptions = {
+    position: sonnerPlacement,
+    style: SonnerStyle.destructive,
+  } as const;
 
   // Camera capture
-  let video: HTMLVideoElement;
-  let stream: MediaStream;
-  let canvas: HTMLCanvasElement;
-  let showCanvas = $state(false); // track if a capture has been taken
+  let width = $state(0); // capture full screen width
+  let camera: EasyCamera;
 
   // Time display
   let time = $state(new Date());
-  const timeZone = "Asia/Manila";
 
   // Geolocation
-  let latitude: number | null = $state(null);
-  let longitude: number | null = $state(null);
-  let address: string | null = $state(null);
-  let error: string | null = $state(null);
+  let latitude: number = $state(0);
+  let longitude: number = $state(0);
+  let address: string = $state("");
 
-  // UI styles
-  const desktopControlsStyle = "absolute bottom-5 z-20 inline-flex hidden md:inline-flex";
-  const mobileControlsStyle =
-    "absolute bottom-10 z-20 inline-flex rounded-full w-16 h-16 text-4xl md:hidden";
+  function handleResize() {
+    if (window) {
+      width = window.innerWidth;
+    }
+  }
+
+  // svelte-ignore state_referenced_locally
+  const {
+    errors,
+    form: formData,
+    enhance,
+    message,
+  } = superForm(data.form, {
+    validators: zod4Client(formSchema),
+    onSubmit: () => {
+      loadingSonnerID = toast.loading("Submitting...", {
+        position: "top-center",
+      });
+    },
+    onResult: ({ result }) => {
+      toast.dismiss(loadingSonnerID);
+      if (result.type === "success") {
+        if (isTimedIn) {
+          toast.success(
+            getGreeting("timeOut", data.user.first_name),
+            successSonnerOptions,
+          );
+        } else {
+          toast.success(getGreeting("timeIn", data.user.first_name), successSonnerOptions);
+        }
+        isTimedIn = !isTimedIn;
+      } else if (result.type === "error") {
+        toast.error("Something went wrong timing you in.", errorSonnerOptions);
+      }
+    },
+  });
+
+  const retake = () => {
+    $formData.selfie = "";
+  };
 
   onMount(() => {
-
     // Update time every second
     const interval = setInterval(() => {
       time = new Date();
     }, 1000);
 
+    // Handle window resize to update camera width
+    width = window.innerWidth || 0;
+    window.addEventListener("resize", handleResize);
 
-    // Access camera and stream to video element
-    (async () => {
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-        });
-        video.srcObject = stream;
-      } catch (err) {
-        console.error("Camera error:", err);
-      }
-    })();
-
+    // Set initial timestamp status
+    isTimedIn = data.user_timestamp_status === TimestampStatus.TIMED_IN;
 
     // Get geolocation
     (async () => {
@@ -56,129 +122,85 @@
         latitude = location.latitude;
         longitude = location.longitude;
         address = location.address;
-
       } catch (err) {
-        error = "Unable to retrieve location.";
-        console.error("Geolocation error:", err);
+        toast.warning("Unable to retrieve location.", {
+          position: "top-center",
+          style: SonnerStyle.warning,
+        });
       }
     })();
-  
+
     return () => {
       clearInterval(interval);
-      stream?.getTracks().forEach((track) => track.stop());
+      window.removeEventListener("resize", handleResize);
     };
   });
 
-  const formatTime = (value: Date) =>
-    value.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      timeZone: timeZone,
-    });
-
-  function capture() {
-    // set canvas pixel dimensions to match video
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
-    const ctx = canvas.getContext("2d");
-    if (ctx) {
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    }
-
-    showCanvas = true; // show captured canvas
-  }
-
-  function removeCanvas() {
-    const ctx = canvas.getContext("2d");
-    if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height); // clear previous capture
-    showCanvas = false;
-  }
-
-  function goBack() {
-   goto("/dashboard"); // navigate back to dashboard
-  }
+  const capture = async () => {
+    const imageData = (await camera.captureImage()) as string; // capture image as base64 string
+    $formData.selfie = removeDataURIBase64Prefix(imageData);
+    $formData.user_id = Number(data.user.id);
+    $formData.latitude = latitude;
+    $formData.longitude = longitude;
+  };
 </script>
 
 <div class="relative w-screen h-dvh bg-gray-100 overflow-hidden">
-  <!-- Video fills the screen -->
-  <video
-    bind:this={video}
-    autoplay
-    playsinline
-    class="absolute top-0 left-0 w-screen h-dvh object-cover"
-  ></video>
+  <EasyCamera
+    bind:width
+    style="inset:0;"
+    bind:this={camera}
+    autoOpen
+    mirrorDisplay
+    useAudio={false}
+  />
+  <InfoOverlay {time} {latitude} {longitude} {address} />
+  <BackButton />
 
-  <!-- Time overlay -->
-  <div
-    class="absolute left-3 top-3 rounded-md bg-black/70 px-3 py-1 font-mono text-sm text-white"
-  >
-    {formatTime(time)} - {timeZone}
-  </div>
-
-  <!-- Back button -->
-  <Button class={cn(desktopControlsStyle, "left-5")} onclick={goBack}>
-    <ArrowLeft class="w-8 h-8" size={32} />
-    Back
-</Button>
-
-  <!-- Geolocation overlay -->
-  {#if latitude !== null && longitude !== null}
-    <div
-      class="absolute left-3 top-12 rounded-md max-w-xs bg-black/70 px-3 py-1 font-mono text-sm text-white"
+  {#if !$formData.selfie}
+    <TimestampButton {capture}
+      >{isTimedIn ? "Time Out" : "Time In"}</TimestampButton
     >
-      {address} ({latitude.toFixed(6)}, {longitude.toFixed(6)})
-    </div>
-  {/if}
-
-  <!-- Capture / retake button -->
-  {#if !showCanvas}
-    <!-- Desktop capture button -->
-    <Button class={cn(desktopControlsStyle, "right-5")} onclick={capture}>
-      <Camera class="w-8 h-8" size={32} />
-
-      Time in
-    </Button>
-
-    <!-- Mobile capture button -->
-    <Button
-      class={cn(mobileControlsStyle, "translate-x-1/2 right-1/2")}
-      onclick={capture}
-    >
-      <Camera class="w-8 h-8" />
-    </Button>
   {:else}
-    <!-- Desktop Controls -->
-    <Button
-      variant="outline"
-      class={cn(desktopControlsStyle, "left-5")}
-      onclick={removeCanvas}
-    >
-      <Trash2 class="w-4 h-4" />
-      Take another photo
-    </Button>
-    <Button class={cn(desktopControlsStyle, "right-5")} onclick={removeCanvas}>
-      <SendHorizontal class="w-4 h-4" />
-      Submit
-    </Button>
-
-    <!-- Mobile Controls -->
-    <Button
-      variant="outline"
-      class={cn(mobileControlsStyle, "right-1/2 translate-x-[-150%]")}
-      onclick={removeCanvas}
-    >
-      <Trash2 class="w-4 h-4" />
-    </Button>
-    <Button class={cn(mobileControlsStyle, "left-1/2 translate-x-[150%]")}>
-      <SendHorizontal class="w-4 h-4" />
-    </Button>
+    <RetakeButton {retake} />
+    <form method="post" use:enhance>
+      <input type="hidden" name="user_id" bind:value={$formData.user_id} />
+      <input type="hidden" name="latitude" bind:value={$formData.latitude} />
+      <input type="hidden" name="longitude" bind:value={$formData.longitude} />
+      <input type="hidden" name="selfie" bind:value={$formData.selfie} />
+      <SubmitButton action={isTimedIn ? "?/time_out" : "?/time_in"} />
+    </form>
   {/if}
 
-  <!-- Canvas overlay -->
-  <canvas
-    bind:this={canvas}
-    class="absolute top-1/2 left-1/2 z-10 translate-x-[-50%] translate-y-[-50%] w-screen h-dvh object-cover"
-  ></canvas>
+  <!-- Captured image overlay -->
+  {#if $formData.selfie}
+    <ImageOverlay image={$formData.selfie} />
+  {/if}
+
+  <!-- Toast notifications -->
+  {#if $message}
+    {toast("Something went wrong.", {
+      description: $message,
+      ...errorSonnerOptions,
+    })}
+  {/if}
+  {#if $errors.user_id}
+    {toast.error("Invalid user ID.", {
+      description: String($errors.user_id),
+      ...errorSonnerOptions,
+    })}
+  {/if}
+  {#if $errors.selfie}
+    {toast.error("Invalid selfie.", {
+      description: String($errors.selfie),
+      ...errorSonnerOptions,
+    })}
+  {/if}
+
+  {#if $errors.latitude || $errors.longitude}
+    {toast.error("Invalid location.", {
+      description: String($errors.latitude || $errors.longitude),
+      ...errorSonnerOptions,
+    })}
+  {/if}
 </div>
