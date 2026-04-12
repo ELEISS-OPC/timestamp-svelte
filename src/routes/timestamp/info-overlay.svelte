@@ -29,7 +29,7 @@
 </div>
 
 <!-- Geolocation overlay -->
-{#if latitude !== null && longitude !== null}
+{#if latitude !== 0&& longitude !== 0}
   <div
     class="absolute left-3 top-12 rounded-md max-w-xs bg-black/70 px-3 py-1 font-mono text-sm text-white"
   >
