@@ -21,6 +21,8 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
     if (err instanceof errors.UnauthorizedError) {
       return redirect(303, "/logout");
     }
+
+    throw err;
   }
 };
 
