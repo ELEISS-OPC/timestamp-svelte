@@ -107,7 +107,6 @@ export const actions: Actions = {
         selfie: imageUploadResponse.original,
         selfie_preview: imageUploadResponse.preview,
       });
-      console.log("Time out response:", timeOutResponse);
 
       return { form, timeOutResponse };
     } catch (err) {
