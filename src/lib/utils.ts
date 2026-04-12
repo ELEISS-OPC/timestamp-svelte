@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { OPTIONAL_USER_COOKIE_FIELDS, USER_COOKIE_FIELDS } from "./constants";
 import type { Employee, CookieOptions } from "./types";
 import { type Cookies } from "@sveltejs/kit";
+import { toTitleCase } from "layerchart/utils/string";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -159,7 +160,7 @@ export function getGreeting(
   const item = pickRandom(pool);
 
   if (typeof item === "function") {
-    return item(name || "there");
+    return name ? item(toTitleCase(name)) : item("friend");
   }
 
   return item;

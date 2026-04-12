@@ -21,7 +21,6 @@
   import SubmitButton from "./submit-btn.svelte";
   import TimestampButton from "./timestamp-btn.svelte";
   import BackButton from "./back-btn.svelte";
-  import { toTitleCase } from "layerchart/utils/string";
   import { getGreeting } from "$utils";
 
   let {
