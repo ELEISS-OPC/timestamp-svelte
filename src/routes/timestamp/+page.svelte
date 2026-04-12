@@ -81,8 +81,8 @@
       });
     },
     onResult: ({ result }) => {
+      toast.dismiss(loadingSonnerID);
       if (result.type === "success") {
-        toast.dismiss(loadingSonnerID);
         if (isTimedIn) {
           toast.success(
             getGreeting("timeOut", data.user.first_name),
