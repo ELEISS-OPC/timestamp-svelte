@@ -91,6 +91,15 @@ export class AlreadyTimedOutError extends APIError {
   }
 }
 
+export class ImageTooLargeError extends APIError {
+  constructor(
+    message: string = "The image data provided is too large.",
+    statusCode: number = STATUS.HTTP_413_CONTENT_TOO_LARGE,
+  ) {
+    super(message, statusCode);
+  }
+}
+
 const errors = {
   ServerError,
   UserNotFoundError,
@@ -101,6 +110,7 @@ const errors = {
   InvalidImageError,
   AlreadyTimedInError,
   AlreadyTimedOutError,
+  ImageTooLargeError,
 };
 
 export default errors;

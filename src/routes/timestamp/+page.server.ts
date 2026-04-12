@@ -59,6 +59,9 @@ export const actions: Actions = {
       if (err instanceof errors.InvalidImageError) {
         return setError(form, "selfie", err.message, { status: 400 });
       }
+      if (err instanceof errors.ImageTooLargeError) {
+        return setError(form, "selfie", err.message, { status: 413 });
+      }
       if (err instanceof errors.BadRequestError) {
         return message(form, "The data provided is invalid.", { status: 400 });
       }

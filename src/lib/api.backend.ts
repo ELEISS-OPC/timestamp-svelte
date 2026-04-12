@@ -101,7 +101,7 @@ export async function upload_image_base64(token: string, imageData: string) {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({ image: imageData }),
   });
@@ -118,8 +118,14 @@ export async function upload_image_base64(token: string, imageData: string) {
           "You are not authorized to perform this action.",
           STATUS.HTTP_401_UNAUTHORIZED,
         );
+
+      case STATUS.HTTP_413_CONTENT_TOO_LARGE:
+        throw new errors.ImageTooLargeError(
+          "The image data provided is too large.",
+          STATUS.HTTP_413_CONTENT_TOO_LARGE,
+        );
       case STATUS.HTTP_422_UNPROCESSABLE_CONTENT:
-        console.log(response)
+        console.log(response);
         throw new errors.UnprocessableContentError(
           "The image data could not be processed.",
           STATUS.HTTP_422_UNPROCESSABLE_CONTENT,
@@ -140,11 +146,14 @@ export async function upload_image_base64(token: string, imageData: string) {
 }
 
 export async function timestamp_status(token: string, user_id: number) {
-  const response = await fetch(urlJoin(BACKEND_URL, `/timestamp/current-status/${user_id}`), {
-    headers: {
-      Authorization: `Bearer ${token}`,
+  const response = await fetch(
+    urlJoin(BACKEND_URL, `/timestamp/current-status/${user_id}`),
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     },
-  });
+  );
 
   if (!response.ok) {
     switch (response.status) {
@@ -172,7 +181,6 @@ export async function timestamp_status(token: string, user_id: number) {
 
   return await response.json();
 }
-
 
 export async function time_in(
   token: string,
