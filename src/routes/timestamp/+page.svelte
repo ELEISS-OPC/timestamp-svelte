@@ -21,7 +21,7 @@
   import SubmitButton from "./submit-btn.svelte";
   import TimestampButton from "./timestamp-btn.svelte";
   import BackButton from "./back-btn.svelte";
-  import { getGreeting } from "$utils";
+  import { getGreeting, compressBase64Image } from "$utils";
 
   let {
     data,
@@ -89,7 +89,10 @@
             successSonnerOptions,
           );
         } else {
-          toast.success(getGreeting("timeIn", data.user.first_name), successSonnerOptions);
+          toast.success(
+            getGreeting("timeIn", data.user.first_name),
+            successSonnerOptions,
+          );
         }
         isTimedIn = !isTimedIn;
       } else if (result.type === "error") {
@@ -138,7 +141,8 @@
 
   const capture = async () => {
     const imageData = (await camera.captureImage()) as string; // capture image as base64 string
-    $formData.selfie = removeDataURIBase64Prefix(imageData);
+    const compressedImageData = await compressBase64Image(imageData, 0.7); // compress image to reduce size
+    $formData.selfie = removeDataURIBase64Prefix(compressedImageData);
     $formData.user_id = Number(data.user.id);
     $formData.latitude = latitude;
     $formData.longitude = longitude;
