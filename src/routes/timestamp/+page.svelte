@@ -78,6 +78,7 @@
     onSubmit: () => {
       loadingSonnerID = toast.loading("Submitting...", {
         position: "top-center",
+        duration: Infinity
       });
     },
     onResult: ({ result }) => {
