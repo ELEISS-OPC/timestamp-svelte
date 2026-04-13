@@ -83,7 +83,6 @@
   import ChevronRightIcon from "@tabler/icons-svelte/icons/chevron-right";
   import ChevronsRightIcon from "@tabler/icons-svelte/icons/chevrons-right";
   import DataTableCheckbox from "./data-table-checkbox.svelte";
-  import DataTableCellViewer from "./data-table-cell-viewer.svelte";
   import DataTableTimeIn from "./data-table-time-in.svelte";
   import DataTableTimeOut from "./data-table-time-out.svelte";
   import DataTableEmployee from "./data-table-employee.svelte";
