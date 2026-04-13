@@ -26,9 +26,9 @@
       enableHiding: false,
     },
     {
-      accessorKey: "type",
-      header: "Section Type",
-      cell: ({ row }) => renderComponent(DataTableType, { row }),
+      accessorKey: "employee",
+      header: "Employee",
+      cell: ({ row }) => renderComponent(DataTableEmployee, { row }),
     },
     {
       accessorKey: "status",
@@ -36,19 +36,14 @@
       cell: ({ row }) => renderComponent(DataTableStatus, { row }),
     },
     {
-      accessorKey: "target",
-      header: () => renderComponent(DataTableHeaderTarget, {}),
-      cell: ({ row }) => renderComponent(DataTableTarget, { row }),
+      accessorKey: "time_in",
+      header: "Time In",
+      cell: ({ row }) => renderComponent(DataTableTimeIn, { row }),
     },
     {
-      accessorKey: "limit",
-      header: () => renderComponent(DataTableHeaderLimit, {}),
-      cell: ({ row }) => renderComponent(DataTableLimit, { row }),
-    },
-    {
-      accessorKey: "reviewer",
-      header: "Reviewer",
-      cell: ({ row }) => renderComponent(DataTableReviewer, { row }),
+      accessorKey: "time_out",
+      header: "Time Out",
+      cell: ({ row }) => renderComponent(DataTableTimeOut, { row }),
     },
     {
       id: "actions",
@@ -94,10 +89,11 @@
   import ChevronsRightIcon from "@tabler/icons-svelte/icons/chevrons-right";
   import DataTableCheckbox from "./data-table-checkbox.svelte";
   import DataTableCellViewer from "./data-table-cell-viewer.svelte";
-  import DataTableReviewer from "./data-table-reviewer.svelte";
+  import DataTableTimeIn from "./data-table-time-in.svelte";
+  import DataTableTimeOut from "./data-table-time-out.svelte";
+  import DataTableEmployee from "./data-table-employee.svelte";
   import DataTableActions from "./data-table-actions.svelte";
   import DataTableDragHandle from "./data-table-drag-handle.svelte";
-  import DataTableType from "./data-table-type.svelte";
   import DataTableStatus from "./data-table-status.svelte";
   import DataTableTarget from "./data-table-target.svelte";
   import DataTableLimit from "./data-table-limit.svelte";
