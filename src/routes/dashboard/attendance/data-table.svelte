@@ -31,11 +31,6 @@
       cell: ({ row }) => renderComponent(DataTableEmployee, { row }),
     },
     {
-      accessorKey: "status",
-      header: "Status",
-      cell: ({ row }) => renderComponent(DataTableStatus, { row }),
-    },
-    {
       accessorKey: "time_in",
       header: "Time In",
       cell: ({ row }) => renderComponent(DataTableTimeIn, { row }),
