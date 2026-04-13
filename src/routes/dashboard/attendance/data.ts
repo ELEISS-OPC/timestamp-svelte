@@ -13,7 +13,6 @@ export default [
       avatar_url: null,
       avatar_url_preview: null,
     },
-    status: TimestampStatus.TIMED_OUT,
     time_in: "2026-04-12 08:17:56.819074",
     time_in_selfie: "https://example.com/selfies/john_doe_time_in.jpg",
     time_in_selfie_preview:
@@ -34,7 +33,6 @@ export default [
       avatar_url: null,
       avatar_url_preview: null,
     },
-    status: TimestampStatus.TIMED_OUT,
     time_in: "2024-06-01T08:00:00Z",
     time_in_selfie: "https://example.com/selfies/john_doe_time_in.jpg",
     time_in_selfie_preview:
@@ -55,7 +53,6 @@ export default [
       avatar_url: null,
       avatar_url_preview: null,
     },
-    status: TimestampStatus.TIMED_IN,
     time_in: "2024-06-01T08:00:00Z",
     time_in_selfie: "https://example.com/selfies/john_doe_time_in.jpg",
     time_in_selfie_preview:

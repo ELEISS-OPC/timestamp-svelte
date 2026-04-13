@@ -15,7 +15,6 @@ export const EmployeeSchema = z.object({
 export const schema = z.object({
   id: z.number(),
   employee: EmployeeSchema,
-  status: z.enum([TimestampStatus.TIMED_IN, TimestampStatus.TIMED_OUT]),
   time_in: z.iso.datetime(),
   time_in_selfie: z.string(),
   time_in_selfie_preview: z.string(),
