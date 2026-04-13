@@ -19,7 +19,7 @@
     },
     {
       name: "Attendance",
-      url: "#",
+      url: "/dashboard/attendance",
       icon: CalendarClockIcon,
     },
     {
