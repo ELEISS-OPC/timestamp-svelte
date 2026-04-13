@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Row } from "@tanstack/table-core";
-	import type { Schema } from "./schemas.js";
+	import type { Schema } from "./schemas";
 	import { Label } from "$lib/components/ui/label/index.js";
 	import * as Select from "$lib/components/ui/select/index.js";
 

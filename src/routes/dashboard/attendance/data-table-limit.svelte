@@ -3,7 +3,7 @@
 	import { Input } from "$lib/components/ui/input/index.js";
 	import { toast } from "svelte-sonner";
 	import type { Row } from "@tanstack/table-core";
-	import type { Schema } from "./schemas.js";
+	import type { Schema } from "./schemas";
 
 	let { row }: { row: Row<Schema> } = $props();
 </script>

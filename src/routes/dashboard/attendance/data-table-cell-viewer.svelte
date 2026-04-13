@@ -12,7 +12,7 @@
 	import { Input } from "$lib/components/ui/input/index.js";
 	import * as Select from "$lib/components/ui/select/index.js";
 	import { Separator } from "$lib/components/ui/separator/index.js";
-	import type { Schema } from "./schemas.js";
+	import type { Schema } from "./schemas";
 
 	const chartData = [
 		{ date: new Date("2024-01-01"), desktop: 186, mobile: 80 },
