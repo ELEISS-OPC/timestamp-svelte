@@ -89,11 +89,6 @@
   import DataTableEmployee from "./data-table-employee.svelte";
   import DataTableActions from "./data-table-actions.svelte";
   import DataTableDragHandle from "./data-table-drag-handle.svelte";
-  import DataTableStatus from "./data-table-status.svelte";
-  import DataTableTarget from "./data-table-target.svelte";
-  import DataTableLimit from "./data-table-limit.svelte";
-  import DataTableHeaderTarget from "./data-table-header-target.svelte";
-  import DataTableHeaderLimit from "./data-table-header-limit.svelte";
   import { DragDropProvider } from "@dnd-kit-svelte/svelte";
   import { move } from "@dnd-kit/helpers";
   import { useSortable } from "@dnd-kit-svelte/svelte/sortable";
