@@ -25,3 +25,4 @@ export const schema = z.object({
 });
 
 export type Schema = z.infer<typeof schema>;
+export type EmployeeSchema = z.infer<typeof EmployeeSchema>;
