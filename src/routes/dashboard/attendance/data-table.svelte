@@ -78,9 +78,9 @@
 		type SortingState,
 		type VisibilityState,
 	} from "@tanstack/table-core";
-	import type { Schema } from "./schemas.js";
+	import type { Schema } from "./schemas";
 	import { RestrictToVerticalAxis } from "@dnd-kit/abstract/modifiers";
-	import { createSvelteTable } from "$lib/components/ui/data-table/data-table.svelte.js";
+	import { createSvelteTable } from "$lib/components/ui/data-table";
 	import * as Tabs from "$lib/components/ui/tabs/index.js";
 	import * as Table from "$lib/components/ui/table/index.js";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
