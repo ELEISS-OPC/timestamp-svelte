@@ -1,5 +1,3 @@
-import { TimestampStatus } from "$lib/enums";
-
 export default [
   {
     id: 1,
@@ -14,10 +12,14 @@ export default [
       avatar_url_preview: null,
     },
     time_in: "2026-04-12 08:17:56.819074",
+    time_in_lat: 37.7749,
+    time_in_lng: -122.4194,
     time_in_selfie: "https://example.com/selfies/john_doe_time_in.jpg",
     time_in_selfie_preview:
       "https://example.com/selfies/john_doe_time_in_preview.jpg",
     time_out: "2026-04-12 09:01:56.819074Z",
+    time_out_lat: null,
+    time_out_lng: null,
     time_out_selfie: null,
     time_out_selfie_preview: null,
   },
@@ -34,10 +36,14 @@ export default [
       avatar_url_preview: null,
     },
     time_in: "2024-06-01T08:00:00Z",
+    time_in_lat: 37.7749,
+    time_in_lng: -122.4194,
     time_in_selfie: "https://example.com/selfies/john_doe_time_in.jpg",
     time_in_selfie_preview:
       "https://example.com/selfies/john_doe_time_in_preview.jpg",
     time_out: null,
+    time_out_lat: null,
+    time_out_lng: null,
     time_out_selfie: null,
     time_out_selfie_preview: null,
   },
@@ -54,9 +60,13 @@ export default [
       avatar_url_preview: null,
     },
     time_in: "2024-06-01T08:00:00Z",
+    time_in_lat: 37.7749,
+    time_in_lng: -122.4194,
     time_in_selfie: "https://example.com/selfies/john_doe_time_in.jpg",
     time_in_selfie_preview:
       "https://example.com/selfies/john_doe_time_in_preview.jpg",
+    time_out_lat: null,
+    time_out_lng: null,
     time_out: null,
     time_out_selfie: null,
     time_out_selfie_preview: null,

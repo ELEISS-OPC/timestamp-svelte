@@ -16,9 +16,13 @@ export const schema = z.object({
   id: z.number(),
   employee: EmployeeSchema,
   time_in: z.iso.datetime(),
+  time_in_lat: z.number(),
+  time_in_lng: z.number(),
   time_in_selfie: z.string(),
   time_in_selfie_preview: z.string(),
   time_out: z.iso.datetime().nullable(),
+  time_out_lat: z.number().nullable(),
+  time_out_lng: z.number().nullable(),
   time_out_selfie: z.string().nullable(),
   time_out_selfie_preview: z.string().nullable(),
 });
