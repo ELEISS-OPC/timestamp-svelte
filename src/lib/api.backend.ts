@@ -300,8 +300,26 @@ export async function time_out(
   return await response.json();
 }
 
-export function get_all_timestamps(token: string) {
-  return fetch(urlJoin(BACKEND_URL, "/timestamp/all-records/"), {
+export function get_all_timestamps(
+  token: string,
+  records: "today" | "yesterday" | "all" = "all",
+) {
+  let route;
+
+  switch (records) {
+    case "today":
+      route = "/timestamp/all-record/today";
+      break;
+    case "yesterday":
+      route = "/timestamp/all-record/yesterday";
+      break;
+    case "all":
+    default:
+      route = "/timestamp/all-records";
+      break;
+  }
+
+  return fetch(urlJoin(BACKEND_URL, route), {
     headers: {
       Authorization: `Bearer ${token}`,
     },
