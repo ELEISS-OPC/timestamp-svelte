@@ -1,11 +1,6 @@
 <script lang="ts" module>
   export const columns: ColumnDef<Schema>[] = [
     {
-      id: "drag",
-      header: () => null,
-      cell: () => renderComponent(DataTableDragHandle, {}),
-    },
-    {
       id: "select",
       header: ({ table }) =>
         renderComponent(DataTableCheckbox, {
@@ -31,9 +26,9 @@
       cell: ({ row }) => renderComponent(DataTableEmployee, { row }),
     },
     {
-      "accessorKey": "date",
-      "header": "Date",
-      "cell": ({ row }) => renderComponent(DataTableDate, { row }),
+      accessorKey: "date",
+      header: "Date",
+      cell: ({ row }) => renderComponent(DataTableDate, { row }),
     },
     {
       accessorKey: "time_in",
@@ -44,7 +39,7 @@
       accessorKey: "time_out",
       header: "Time Out",
       cell: ({ row }) => renderComponent(DataTableTimeOut, { row }),
-    }
+    },
   ];
 </script>
 
@@ -65,7 +60,6 @@
     type VisibilityState,
   } from "@tanstack/table-core";
   import type { Schema } from "./schemas";
-  import { RestrictToVerticalAxis } from "@dnd-kit/abstract/modifiers";
   import { createSvelteTable } from "$lib/components/ui/data-table";
   import * as Tabs from "$lib/components/ui/tabs/index.js";
   import * as Table from "$lib/components/ui/table/index.js";
@@ -88,10 +82,6 @@
   import DataTableTimeOut from "./data-table-time-out.svelte";
   import DataTableEmployee from "./data-table-employee.svelte";
   import DataTableDate from "./data-table-date.svelte";
-  import DataTableDragHandle from "./data-table-drag-handle.svelte";
-  import { DragDropProvider } from "@dnd-kit-svelte/svelte";
-  import { move } from "@dnd-kit/helpers";
-  import { useSortable } from "@dnd-kit-svelte/svelte/sortable";
   import { Badge } from "$lib/components/ui/badge/index.js";
 
   let { data }: { data: Schema[] } = $props();
@@ -251,42 +241,37 @@
     class="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
   >
     <div class="overflow-hidden rounded-lg border">
-      <DragDropProvider
-        modifiers={[RestrictToVerticalAxis]}
-        onDragEnd={(e) => (data = move(data, e))}
-      >
-        <Table.Root>
-          <Table.Header class="bg-muted sticky top-0 z-10">
-            {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
-              <Table.Row>
-                {#each headerGroup.headers as header (header.id)}
-                  <Table.Head colspan={header.colSpan}>
-                    {#if !header.isPlaceholder}
-                      <FlexRender
-                        content={header.column.columnDef.header}
-                        context={header.getContext()}
-                      />
-                    {/if}
-                  </Table.Head>
-                {/each}
-              </Table.Row>
-            {/each}
-          </Table.Header>
-          <Table.Body class="**:data-[slot=table-cell]:first:w-8">
-            {#if table.getRowModel().rows?.length}
-              {#each table.getRowModel().rows as row (row.id)}
-                {@render DraggableRow({ row })}
+      <Table.Root>
+        <Table.Header class="bg-muted sticky top-0 z-10">
+          {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
+            <Table.Row>
+              {#each headerGroup.headers as header (header.id)}
+                <Table.Head colspan={header.colSpan}>
+                  {#if !header.isPlaceholder}
+                    <FlexRender
+                      content={header.column.columnDef.header}
+                      context={header.getContext()}
+                    />
+                  {/if}
+                </Table.Head>
               {/each}
-            {:else}
-              <Table.Row>
-                <Table.Cell colspan={columns.length} class="h-24 text-center">
-                  No results.
-                </Table.Cell>
-              </Table.Row>
-            {/if}
-          </Table.Body>
-        </Table.Root>
-      </DragDropProvider>
+            </Table.Row>
+          {/each}
+        </Table.Header>
+        <Table.Body class="**:data-[slot=table-cell]:first:w-8">
+          {#if table.getRowModel().rows?.length}
+            {#each table.getRowModel().rows as row (row.id)}
+              {@render DraggableRow({ row })}
+            {/each}
+          {:else}
+            <Table.Row>
+              <Table.Cell colspan={columns.length} class="h-24 text-center">
+                No results.
+              </Table.Cell>
+            </Table.Row>
+          {/if}
+        </Table.Body>
+      </Table.Root>
     </div>
     <div class="flex items-center justify-between px-4">
       <div class="text-muted-foreground hidden flex-1 text-sm lg:flex">
@@ -378,21 +363,10 @@
 </Tabs.Root>
 
 {#snippet DraggableRow({ row }: { row: Row })}
-  {@const { ref, isDragging, handleRef } = useSortable({
-    id: row.original.id,
-    index: () => row.index,
-  })}
-
-  <Table.Row
-    data-state={row.getIsSelected() && "selected"}
-    data-dragging={isDragging.current}
-    class="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
-    {@attach ref}
-  >
+  <Table.Row data-state={row.getIsSelected() && "selected"}>
     {#each row.getVisibleCells() as cell (cell.id)}
       <Table.Cell>
         <FlexRender
-          attach={handleRef}
           content={cell.column.columnDef.cell}
           context={cell.getContext()}
         />
