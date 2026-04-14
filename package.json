@@ -44,8 +44,6 @@
 	},
 	"dependencies": {
 		"@cloudparker/easy-camera-svelte": "^2.0.1",
-		"@dnd-kit-svelte/svelte": "^0.1.6",
-		"@dnd-kit/helpers": "^0.3.2",
 		"@tabler/icons-svelte": "^3.41.1",
 		"@tanstack/table-core": "^8.21.3",
 		"d3-scale": "^4.0.2",
