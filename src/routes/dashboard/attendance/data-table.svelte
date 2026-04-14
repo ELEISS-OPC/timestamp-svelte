@@ -85,6 +85,8 @@
   import { Badge } from "$lib/components/ui/badge/index.js";
   import { goto } from "$app/navigation";
   import type { AttendanceView } from "$lib/types";
+  import { Spinner } from "$components/ui/spinner";
+  import { afterNavigate } from "$app/navigation";
 
   let { data, view }: { data: Schema[]; view: AttendanceView } = $props();
   let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
@@ -179,6 +181,16 @@
   let viewLabel = $derived(
     views.find((v) => view === v.id)?.label ?? "Select a view",
   );
+  let loadingView = $state(false);
+
+  function changeView(viewId: string) {
+    loadingView = true;
+    goto(`/dashboard/attendance?view=${viewId}`);
+  }
+
+  afterNavigate(() => {
+    loadingView = false;
+  });
 </script>
 
 <Tabs.Root value={view} class="w-full flex-col justify-start gap-6">
@@ -190,9 +202,7 @@
       </Select.Trigger>
       <Select.Content>
         {#each views as view (view.id)}
-          <Select.Item
-            value={view.id}
-            onclick={() => goto(`/dashboard/attendance?view=${view.id}`)}
+          <Select.Item value={view.id} onclick={() => changeView(view.id)}
             >{view.label}</Select.Item
           >
         {/each}
@@ -204,10 +214,13 @@
       {#each views as tableView (tableView.id)}
         <Tabs.Trigger
           value={tableView.id}
-          onclick={() => goto(`/dashboard/attendance?view=${tableView.id}`)}
+          onclick={() => changeView(tableView.id)}
         >
           {tableView.label}
-          {#if data.length > 0 && tableView.id === view}
+          {#if loadingView && view === tableView.id}
+            <Spinner />
+          {/if}
+          {#if data.length > 0 && tableView.id === view && !loadingView}
             <Badge variant="secondary">{data.length}</Badge>
           {/if}
         </Tabs.Trigger>
