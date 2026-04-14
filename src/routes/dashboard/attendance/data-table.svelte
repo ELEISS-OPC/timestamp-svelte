@@ -31,12 +31,12 @@
       cell: ({ row }) => renderComponent(DataTableDate, { row }),
     },
     {
-      accessorKey: "time_in",
+      accessorKey: "time in",
       header: "Time In",
       cell: ({ row }) => renderComponent(DataTableTimeIn, { row }),
     },
     {
-      accessorKey: "time_out",
+      accessorKey: "time out",
       header: "Time Out",
       cell: ({ row }) => renderComponent(DataTableTimeOut, { row }),
     },
