@@ -3,4 +3,4 @@
   let { data } = $props();
 </script>
 
-<DataTable data={data.timestamps} />
+<DataTable data={data.timestampdata} view={data.view} />

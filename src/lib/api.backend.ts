@@ -2,6 +2,7 @@ import { urlJoin } from "$lib/utils";
 import STATUS from "$lib/status";
 import { BACKEND_URL } from "$env/static/private";
 import errors from "$lib/errors";
+import type { AttendanceView } from "$lib/types";
 
 /**
  * Authenticate a user and retrieve an access token.
@@ -302,18 +303,18 @@ export async function time_out(
 
 export function get_all_timestamps(
   token: string,
-  records: "today" | "yesterday" | "all" = "all",
+  records: AttendanceView = "today",
 ) {
   let route;
 
   switch (records) {
     case "today":
-      route = "/timestamp/all-record/today";
+      route = "/timestamp/all-records/today";
       break;
     case "yesterday":
-      route = "/timestamp/all-record/yesterday";
+      route = "/timestamp/all-records/yesterday";
       break;
-    case "all":
+    case "history":
     default:
       route = "/timestamp/all-records";
       break;
