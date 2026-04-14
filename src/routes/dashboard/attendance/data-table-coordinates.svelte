@@ -8,7 +8,7 @@
   let { row }: { row: Row<Schema> } = $props();
 
   let address: string = $state("");
-  let loading: boolean = $state(false);
+  let loading: boolean = $state(true);
   onMount(async () => {
     if (address) return;
     loading = true;
