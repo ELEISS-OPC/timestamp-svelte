@@ -1,13 +1,15 @@
 <script lang="ts">
+  import { Spinner } from "$components/ui/spinner";
   import { PUBLIC_IMAGE_HOST, PUBLIC_TIMEZONE } from "$env/static/public";
   import { buttonVariants } from "$lib/components/ui/button/index.js";
   import * as Popover from "$lib/components/ui/popover";
   import { cn, urlJoin } from "$utils";
   import type { Row } from "@tanstack/table-core";
-  import type { Schema } from "./schemas";
   import DataTableCoordinates from "./data-table-coordinates.svelte";
+  import type { Schema } from "./schemas";
 
   let { row }: { row: Row<Schema> } = $props();
+  let loading = $state(true);
 </script>
 
 {#if row.original.time_out}
@@ -37,6 +39,9 @@
             alt="Time Out Selfie"
             class="w-full h-auto rounded-md"
           />
+          {#if loading}
+            <Spinner />
+          {/if}
         {/if}
       </div>
     </Popover.Content>

@@ -6,8 +6,10 @@
   import type { Row } from "@tanstack/table-core";
   import DataTableCoordinates from "./data-table-coordinates.svelte";
   import type { Schema } from "./schemas";
+  import { Spinner } from "$components/ui/spinner";
 
   let { row }: { row: Row<Schema> } = $props();
+  let loading = $state(true);
 </script>
 
 <Popover.Root>
@@ -32,7 +34,11 @@
           src={urlJoin(PUBLIC_IMAGE_HOST, row.original.time_in_selfie_preview)}
           alt="Time In Selfie"
           class="w-full h-auto rounded-md"
+          onload={() => (loading = false)}
         />
+        {#if loading}
+          <Spinner />
+        {/if}
       {/if}
     </div>
   </Popover.Content>
