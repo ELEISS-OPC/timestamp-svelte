@@ -1,28 +1,13 @@
 <script lang="ts">
   import { PUBLIC_IMAGE_HOST, PUBLIC_TIMEZONE } from "$env/static/public";
-  import { ReverseGeocode } from "$lib/api.osm";
   import { buttonVariants } from "$lib/components/ui/button/index.js";
   import * as Popover from "$lib/components/ui/popover";
   import { cn, urlJoin } from "$utils";
   import type { Row } from "@tanstack/table-core";
+  import DataTableCoordinates from "./data-table-coordinates.svelte";
   import type { Schema } from "./schemas";
 
   let { row }: { row: Row<Schema> } = $props();
-
-  let address: string = $state("");
-  async function getLocation() {
-    if (address) return;
-    try {
-      const res = await ReverseGeocode(
-        row.original.time_in_latitude,
-        row.original.time_in_longitude,
-      );
-      address = res;
-    } catch (error) {
-      console.error("Error reverse geocoding:", error);
-      address = "Address not available";
-    }
-  }
 </script>
 
 <Popover.Root>
@@ -31,7 +16,6 @@
       buttonVariants({ variant: "ghost" }),
       "hover:underline font-normal",
     )}
-    onclick={getLocation}
   >
     {new Date(row.original.time_in).toLocaleTimeString("en-US", {
       hour: "2-digit",
@@ -41,17 +25,7 @@
   </Popover.Trigger>
   <Popover.Content class="w-80">
     <div class="space-y-2">
-      {#if address}
-        <h4 class="leading-none font-medium">Address</h4>
-        <p class="text-muted-foreground text-sm">
-          {address}
-          {#if row.original.time_in_latitude !== null && row.original.time_in_longitude !== null}
-            ({row.original.time_in_latitude.toFixed(4)}, {row.original.time_in_longitude.toFixed(
-              4,
-            )})
-          {/if}
-        </p>
-      {/if}
+      <DataTableCoordinates {row} />
       {#if row.original.time_in_selfie_preview}
         <h4 class="leading-none font-medium">Selfie</h4>
         <img
