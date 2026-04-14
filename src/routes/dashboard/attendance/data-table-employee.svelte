@@ -9,8 +9,7 @@
 
   let { row }: { row: Row<Schema> } = $props();
   // svelte-ignore state_referenced_locally
-  const employee: EmployeeSchema = row.original.employee;
-
+  const employee: EmployeeSchema = row.original.user;
   let avatarURL = $state(employee.avatar_url_preview);
 
   onMount(async () => {
