@@ -13,16 +13,16 @@
   async function getLocation() {
     if (address) return;
     if (
-      row.original.time_out_lat === null ||
-      row.original.time_out_lng === null
+      row.original.time_out_latitude === null ||
+      row.original.time_out_longitude === null
     ) {
       address = "Address not available";
       return;
     }
     try {
       const res = await ReverseGeocode(
-        row.original.time_out_lat,
-        row.original.time_out_lng,
+        row.original.time_out_latitude,
+        row.original.time_out_longitude,
       );
       address = res;
     } catch (error) {
@@ -53,8 +53,8 @@
           <h4 class="leading-none font-medium">Address</h4>
           <p class="text-muted-foreground text-sm">
             {address}
-            {#if row.original.time_out_lat !== null && row.original.time_out_lng !== null}
-              ({row.original.time_out_lat.toFixed(4)}, {row.original.time_out_lng.toFixed(
+            {#if row.original.time_out_latitude !== null && row.original.time_out_longitude !== null}
+              ({row.original.time_out_latitude.toFixed(4)}, {row.original.time_out_longitude.toFixed(
                 4,
               )})
             {/if}
