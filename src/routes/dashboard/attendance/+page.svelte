@@ -1,6 +1,6 @@
 <script lang="ts">
-  import data from "./data.js";
   import DataTable from "./data-table.svelte";
+  let { data } = $props();
 </script>
 
-<DataTable {data} />
+<DataTable data={data.timestamps} />
