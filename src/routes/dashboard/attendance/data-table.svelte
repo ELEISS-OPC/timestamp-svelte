@@ -31,6 +31,11 @@
       cell: ({ row }) => renderComponent(DataTableEmployee, { row }),
     },
     {
+      "accessorKey": "date",
+      "header": "Date",
+      "cell": ({ row }) => renderComponent(DataTableDate, { row }),
+    },
+    {
       accessorKey: "time_in",
       header: "Time In",
       cell: ({ row }) => renderComponent(DataTableTimeIn, { row }),
@@ -82,6 +87,7 @@
   import DataTableTimeIn from "./data-table-time-in.svelte";
   import DataTableTimeOut from "./data-table-time-out.svelte";
   import DataTableEmployee from "./data-table-employee.svelte";
+  import DataTableDate from "./data-table-date.svelte";
   import DataTableDragHandle from "./data-table-drag-handle.svelte";
   import { DragDropProvider } from "@dnd-kit-svelte/svelte";
   import { move } from "@dnd-kit/helpers";
