@@ -22,8 +22,7 @@
   <Avatar.Root class="w-8 h-8">
     <Avatar.Image src={avatarURL} alt={employee.first_name} />
     <Avatar.Fallback>
-      {employee.first_name[0]}
-      {employee.last_name[0]}
+      {`${employee.first_name[0]}${employee.last_name[0]}`}
     </Avatar.Fallback>
   </Avatar.Root>
   <div class="flex flex-col">
