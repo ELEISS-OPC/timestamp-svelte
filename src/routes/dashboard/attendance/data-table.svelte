@@ -39,11 +39,7 @@
       accessorKey: "time_out",
       header: "Time Out",
       cell: ({ row }) => renderComponent(DataTableTimeOut, { row }),
-    },
-    {
-      id: "actions",
-      cell: () => renderComponent(DataTableActions, {}),
-    },
+    }
   ];
 </script>
 
@@ -86,7 +82,6 @@
   import DataTableTimeIn from "./data-table-time-in.svelte";
   import DataTableTimeOut from "./data-table-time-out.svelte";
   import DataTableEmployee from "./data-table-employee.svelte";
-  import DataTableActions from "./data-table-actions.svelte";
   import DataTableDragHandle from "./data-table-drag-handle.svelte";
   import { DragDropProvider } from "@dnd-kit-svelte/svelte";
   import { move } from "@dnd-kit/helpers";
