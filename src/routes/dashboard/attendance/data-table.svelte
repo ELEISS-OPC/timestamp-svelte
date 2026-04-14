@@ -365,17 +365,12 @@
       </div>
     </div>
   </Tabs.Content>
-  <Tabs.Content value="past-performance" class="flex flex-col px-4 lg:px-6">
+  <Tabs.Content value="yesterday" class="flex flex-col px-4 lg:px-6">
     <div
       class="aspect-video w-full flex-1 rounded-lg border border-dashed"
     ></div>
   </Tabs.Content>
-  <Tabs.Content value="key-personnel" class="flex flex-col px-4 lg:px-6">
-    <div
-      class="aspect-video w-full flex-1 rounded-lg border border-dashed"
-    ></div>
-  </Tabs.Content>
-  <Tabs.Content value="focus-documents" class="flex flex-col px-4 lg:px-6">
+  <Tabs.Content value="history" class="flex flex-col px-4 lg:px-6">
     <div
       class="aspect-video w-full flex-1 rounded-lg border border-dashed"
     ></div>
