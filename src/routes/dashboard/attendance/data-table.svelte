@@ -187,7 +187,6 @@
   function changeView(viewId: string) {
     loadingView = true;
     viewToLoad = viewId;
-
     goto(`/dashboard/attendance?view=${viewId}`);
   }
 
@@ -220,10 +219,10 @@
           onclick={() => changeView(tableView.id)}
         >
           {tableView.label}
-          {#if loadingView && view === viewToLoad}
+          {#if loadingView && tableView.id === viewToLoad}
             <Spinner />
           {/if}
-          {#if data.length > 0 && tableView.id === viewToLoad && !loadingView}
+          {#if data.length > 0 && tableView.id === view}
             <Badge variant="secondary">{data.length}</Badge>
           {/if}
         </Tabs.Trigger>
