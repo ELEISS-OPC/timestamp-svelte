@@ -10,20 +10,30 @@
       description: "Couldn't find what page you were looking for.",
       message:
         "If you think this page should exist, please contact your administrator.",
+      action: homeButton,
     },
     [STATUS.HTTP_500_INTERNAL_SERVER_ERROR]: {
       description: "Something went wrong on our end.",
       message:
         "Check back later or contact your administrator if the problem persists.",
+      action: contactSupport,
     },
-  } as const;
+  };
 
   const content = errors[page.status as keyof typeof errors] ?? {
     description: "We don't know what went wrong, but something did.",
-    message:
-      "Check back later or contact your administrator if the problem persists.",
+    message: "Check back later...",
+    action: homeButton,
   };
 </script>
+
+{#snippet homeButton()}
+  <Button variant="link" onclick={() => goto("/")}>Home</Button>
+{/snippet}
+
+{#snippet contactSupport()}
+  <Button variant="outline">Contact Support</Button>
+{/snippet}
 
 <ErrorPage
   code={page.status}
@@ -31,5 +41,7 @@
   message={content.message}
   footer={page.error?.message}
 >
-  <Button variant="link" onclick={() => goto("/")}>Home</Button>
+  {#if content.action}
+    {@render content.action()}
+  {/if}
 </ErrorPage>
