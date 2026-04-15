@@ -7,13 +7,13 @@
     code,
     description,
     message,
-    stack,
+    footer,
   }: {
     children?: Snippet;
     code: number;
     description: string;
     message: string;
-    stack?: string;
+    footer?: string;
   } = $props();
 </script>
 
@@ -21,7 +21,7 @@
   <Card.Root class="-my-4 w-full max-w-sm shadow-sm">
     <Card.Header>
       <Card.Title class="flex items-center gap-2">
-        404 <FrownIcon />
+        {code} <FrownIcon />
       </Card.Title>
       <Card.Description>{description}</Card.Description>
       {#if children}
@@ -37,7 +37,7 @@
     </Card.Content>
     <Card.Footer>
       <p class="text-xs text-muted-foreground">
-        Error code: {code}. {stack}
+        Error code: {code}. {footer}
       </p>
     </Card.Footer>
   </Card.Root>
