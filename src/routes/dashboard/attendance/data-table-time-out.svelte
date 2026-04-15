@@ -38,6 +38,7 @@
             )}
             alt="Time Out Selfie"
             class="w-full h-auto rounded-md"
+            onload={() => (loading = false)}
           />
           {#if loading}
             <Spinner />
