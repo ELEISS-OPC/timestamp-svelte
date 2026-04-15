@@ -22,6 +22,7 @@
   import TimestampButton from "./timestamp-btn.svelte";
   import BackButton from "./back-btn.svelte";
   import { getGreeting, compressBase64Image } from "$utils";
+  import { Role } from "$lib/enums";
 
   let {
     data,
@@ -78,7 +79,7 @@
     onSubmit: () => {
       loadingSonnerID = toast.loading("Submitting...", {
         position: "top-center",
-        duration: Infinity
+        duration: Infinity,
       });
     },
     onResult: ({ result }) => {
@@ -160,7 +161,10 @@
     useAudio={false}
   />
   <InfoOverlay {time} {latitude} {longitude} {address} />
-  <BackButton />
+
+  {#if data.user.role_id != Role.Employee}
+    <BackButton />
+  {/if}
 
   {#if !$formData.selfie}
     <TimestampButton {capture}
