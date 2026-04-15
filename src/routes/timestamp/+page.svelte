@@ -162,7 +162,7 @@
   />
   <InfoOverlay {time} {latitude} {longitude} {address} />
 
-  {#if data.user.role_id != Role.Employee}
+  {#if data.user.role_id !== Role.Employee}
     <BackButton />
   {/if}
 

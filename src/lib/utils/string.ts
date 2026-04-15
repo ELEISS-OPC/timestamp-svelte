@@ -31,3 +31,7 @@ export const removeDataURIBase64Prefix = (dataURI: string) => {
   const data = dataURI.split(separator);
   return data.length > 1 ? data[1] : dataURI; // Return the base64 data or original if it doesn't have the expected format
 };
+
+export function isNumeric(value: string) {
+  return !isNaN(Number(value));
+}

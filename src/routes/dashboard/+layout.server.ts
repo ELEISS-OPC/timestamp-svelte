@@ -7,7 +7,7 @@ import { Role } from "$lib/enums";
 export const load = (async ({ locals }) => {
   const data: Employee = locals.user;
 
-  if (data.role_id == Role.Employee) {
+  if (data.role_id === Role.Employee) {
     throw redirect(302, "/timestamp");
   }
 
