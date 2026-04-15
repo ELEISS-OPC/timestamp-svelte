@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { useSidebar } from "$lib/components/ui/sidebar/context.svelte.js";
   import * as Sidebar from "$lib/components/ui/sidebar/index.js";
 
   let {
@@ -11,8 +10,6 @@
       icon: any;
     }[];
   } = $props();
-
-  const sidebar = useSidebar();
 </script>
 
 <Sidebar.Group class="group-data-[collapsible=icon]:hidden">
