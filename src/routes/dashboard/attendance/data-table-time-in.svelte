@@ -27,7 +27,10 @@
   </Popover.Trigger>
   <Popover.Content class="w-80">
     <div class="space-y-2">
-      <DataTableCoordinates {row} />
+      <DataTableCoordinates
+        latitude={row.original.time_in_latitude}
+        longitude={row.original.time_in_longitude}
+      />
       {#if row.original.time_in_selfie_preview}
         <h4 class="leading-none font-medium">Selfie</h4>
         <img
