@@ -11,6 +11,7 @@ import {
   optionalSetCookie,
   setCookie,
   checkValidUserInfo,
+  isNumeric,
 } from "$utils";
 import { type Handle, redirect } from "@sveltejs/kit";
 
@@ -53,12 +54,12 @@ export const handle: Handle = async ({ event, resolve }) => {
   }
 
   const userInfoCookie = {
-    id: cookies.get("user_info-id"),
+    id: Number(cookies.get("user_info-id")),
     first_name: cookies.get("user_info-first_name"),
     middle_name: cookies.get("user_info-middle_name"),
     last_name: cookies.get("user_info-last_name"),
     email: cookies.get("user_info-email"),
-    role_id: cookies.get("user_info-role_id"),
+    role_id: Number(cookies.get("user_info-role_id")),
     avatar_url: cookies.get("user_info-avatar_url"),
     avatar_url_preview: cookies.get("user_info-avatar_url_preview"),
   };
@@ -100,9 +101,12 @@ export const handle: Handle = async ({ event, resolve }) => {
     // If we have a user info cookie, try to parse it
     try {
       USER_COOKIE_FIELDS.forEach((field: string) => {
-        const value = cookies.get(`user_info-${field}`);
-        if (value) {
-          (userInfo as any)[field] = value;
+        const cookieVal = cookies.get(`user_info-${field}`);
+        if (!cookieVal) return;
+        if (isNumeric(cookieVal)) {
+          (userInfo as any)[field] = Number(cookieVal);
+        } else {
+          (userInfo as any)[field] = cookieVal;
         }
       });
     } catch (err) {
