@@ -17,11 +17,12 @@
   } = $props();
 </script>
 
-<div class="flex h-screen w-full items-center justify-center">
-  <Card.Root class="-my-4 w-full max-w-sm shadow-sm">
+<div class="flex h-screen w-full items-center justify-center bg-muted">
+  <Card.Root class="-my-4 w-full max-w-sm">
     <Card.Header>
       <Card.Title class="flex items-center gap-2">
-        {code} <FrownIcon />
+        {code}
+        <FrownIcon />
       </Card.Title>
       <Card.Description>{description}</Card.Description>
       {#if children}
