@@ -163,6 +163,7 @@
     onInit={(devices) => {
       loadingCameraToast = toast(`Loading camera "${devices[0].label}" `, {
         position: "top-center",
+        duration: Infinity,
       });
     }}
     onOpen={() => {
