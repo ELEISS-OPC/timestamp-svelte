@@ -15,6 +15,7 @@
   let progress = $state(0);
   let active = $state(false);
   let timer: any;
+  let finishTimeout: any;
 
   // Start animation
   export function start() {
@@ -38,8 +39,10 @@
     clearInterval(timer);
     progress = 100;
 
+    clearTimeout(finishTimeout); // cancel any previous timeout
+
     // allow animation to reach 100 before hiding
-    setTimeout(() => {
+    finishTimeout = setTimeout(() => {
       active = false;
       progress = 0;
     }, 300);
@@ -47,11 +50,13 @@
 
   function reset() {
     clearInterval(timer);
+    clearTimeout(finishTimeout);
     progress = 0;
   }
 
   onDestroy(() => {
     clearInterval(timer);
+    clearTimeout(finishTimeout);
   });
 </script>
 
