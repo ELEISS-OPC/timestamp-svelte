@@ -149,6 +149,7 @@
     $formData.latitude = latitude;
     $formData.longitude = longitude;
   };
+  let loadingCameraToast: string | number = $state("");
 </script>
 
 <div class="relative w-screen h-dvh bg-gray-100 overflow-hidden">
@@ -159,6 +160,14 @@
     autoOpen
     mirrorDisplay
     useAudio={false}
+    onInit={(devices) => {
+      loadingCameraToast = toast(`Loading camera "${devices[0].label}" `, {
+        position: "top-center",
+      });
+    }}
+    onOpen={() => {
+      toast.dismiss(loadingCameraToast);
+    }}
   />
   <InfoOverlay {time} {latitude} {longitude} {address} />
 
