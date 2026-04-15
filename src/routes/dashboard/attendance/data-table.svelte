@@ -44,6 +44,26 @@
 </script>
 
 <script lang="ts">
+  import { goto } from "$app/navigation";
+  import { Badge } from "$lib/components/ui/badge/index.js";
+  import { Button } from "$lib/components/ui/button/index.js";
+  import { createSvelteTable } from "$lib/components/ui/data-table";
+  import {
+    FlexRender,
+    renderComponent,
+  } from "$lib/components/ui/data-table/index.js";
+  import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
+  import { Label } from "$lib/components/ui/label/index.js";
+  import * as Select from "$lib/components/ui/select/index.js";
+  import * as Table from "$lib/components/ui/table/index.js";
+  import * as Tabs from "$lib/components/ui/tabs/index.js";
+  import type { AttendanceView } from "$lib/types";
+  import ChevronDownIcon from "@tabler/icons-svelte/icons/chevron-down";
+  import ChevronLeftIcon from "@tabler/icons-svelte/icons/chevron-left";
+  import ChevronRightIcon from "@tabler/icons-svelte/icons/chevron-right";
+  import ChevronsLeftIcon from "@tabler/icons-svelte/icons/chevrons-left";
+  import ChevronsRightIcon from "@tabler/icons-svelte/icons/chevrons-right";
+  import LayoutColumnsIcon from "@tabler/icons-svelte/icons/layout-columns";
   import {
     getCoreRowModel,
     getFacetedRowModel,
@@ -59,34 +79,12 @@
     type SortingState,
     type VisibilityState,
   } from "@tanstack/table-core";
-  import type { Schema } from "./schemas";
-  import { createSvelteTable } from "$lib/components/ui/data-table";
-  import * as Tabs from "$lib/components/ui/tabs/index.js";
-  import * as Table from "$lib/components/ui/table/index.js";
-  import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
-  import { Button } from "$lib/components/ui/button/index.js";
-  import * as Select from "$lib/components/ui/select/index.js";
-  import { Label } from "$lib/components/ui/label/index.js";
-  import {
-    FlexRender,
-    renderComponent,
-  } from "$lib/components/ui/data-table/index.js";
-  import LayoutColumnsIcon from "@tabler/icons-svelte/icons/layout-columns";
-  import ChevronDownIcon from "@tabler/icons-svelte/icons/chevron-down";
-  import ChevronsLeftIcon from "@tabler/icons-svelte/icons/chevrons-left";
-  import ChevronLeftIcon from "@tabler/icons-svelte/icons/chevron-left";
-  import ChevronRightIcon from "@tabler/icons-svelte/icons/chevron-right";
-  import ChevronsRightIcon from "@tabler/icons-svelte/icons/chevrons-right";
   import DataTableCheckbox from "./data-table-checkbox.svelte";
+  import DataTableDate from "./data-table-date.svelte";
+  import DataTableEmployee from "./data-table-employee.svelte";
   import DataTableTimeIn from "./data-table-time-in.svelte";
   import DataTableTimeOut from "./data-table-time-out.svelte";
-  import DataTableEmployee from "./data-table-employee.svelte";
-  import DataTableDate from "./data-table-date.svelte";
-  import { Badge } from "$lib/components/ui/badge/index.js";
-  import { goto } from "$app/navigation";
-  import type { AttendanceView } from "$lib/types";
-  import { Spinner } from "$components/ui/spinner";
-  import { afterNavigate } from "$app/navigation";
+  import type { Schema } from "./schemas";
 
   let { data, view }: { data: Schema[]; view: AttendanceView } = $props();
   let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
@@ -181,18 +179,9 @@
   let viewLabel = $derived(
     views.find((v) => view === v.id)?.label ?? "Select a view",
   );
-  let loadingView = $state(false);
-  let viewToLoad = $state("");
-
   function changeView(viewId: string) {
-    loadingView = true;
-    viewToLoad = viewId;
     goto(`/dashboard/attendance?view=${viewId}`);
   }
-
-  afterNavigate(() => {
-    loadingView = false;
-  });
 </script>
 
 <Tabs.Root value={view} class="w-full flex-col justify-start gap-6">
@@ -219,9 +208,6 @@
           onclick={() => changeView(tableView.id)}
         >
           {tableView.label}
-          {#if loadingView && tableView.id === viewToLoad}
-            <Spinner />
-          {/if}
           {#if data.length > 0 && tableView.id === view}
             <Badge variant="secondary">{data.length}</Badge>
           {/if}
