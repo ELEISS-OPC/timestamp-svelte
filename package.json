@@ -44,9 +44,12 @@
 	},
 	"dependencies": {
 		"@cloudparker/easy-camera-svelte": "^2.0.1",
+		"@tabler/icons-svelte": "^3.41.1",
+		"@tanstack/table-core": "^8.21.3",
 		"d3-scale": "^4.0.2",
 		"d3-shape": "^3.2.0",
 		"valibot": "^1.3.1",
+		"vaul-svelte": "^0.3.2",
 		"zod": "^4.3.6"
 	}
 }

@@ -122,6 +122,9 @@ export const handle: Handle = async ({ event, resolve }) => {
   //    ...
   //  }
   event.locals.user = userInfo;
+  if (token) {
+    event.locals.token = token;
+  }
 
   return await resolve(event);
 };

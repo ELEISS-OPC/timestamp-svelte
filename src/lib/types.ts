@@ -22,3 +22,5 @@ export type CookieOptions = {
   maxAge?: number;
   expires?: Date;
 };
+
+export type AttendanceView = "today" | "yesterday" | "history";

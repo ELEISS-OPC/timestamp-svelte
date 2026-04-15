@@ -2,6 +2,7 @@ import { urlJoin } from "$lib/utils";
 import STATUS from "$lib/status";
 import { BACKEND_URL } from "$env/static/private";
 import errors from "$lib/errors";
+import type { AttendanceView } from "$lib/types";
 
 /**
  * Authenticate a user and retrieve an access token.
@@ -300,6 +301,53 @@ export async function time_out(
   return await response.json();
 }
 
+export function get_all_timestamps(
+  token: string,
+  records: AttendanceView = "today",
+) {
+  let route;
+
+  switch (records) {
+    case "today":
+      route = "/timestamp/all-records/today";
+      break;
+    case "yesterday":
+      route = "/timestamp/all-records/yesterday";
+      break;
+    case "history":
+    default:
+      route = "/timestamp/all-records";
+      break;
+  }
+
+  return fetch(urlJoin(BACKEND_URL, route), {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((response) => {
+    if (!response.ok) {
+      switch (response.status) {
+        case STATUS.HTTP_401_UNAUTHORIZED:
+          throw new errors.UnauthorizedError(
+            "You are not authorized to access this resource.",
+            STATUS.HTTP_401_UNAUTHORIZED,
+          );
+
+        case STATUS.HTTP_500_INTERNAL_SERVER_ERROR:
+          throw new errors.ServerError(
+            "Something went wrong on the server.",
+            STATUS.HTTP_500_INTERNAL_SERVER_ERROR,
+          );
+        default:
+          throw new Error(
+            `Failed to fetch timestamps with status: ${response.status}`,
+          );
+      }
+    }
+    return response.json();
+  });
+}
+
 const API = {
   login,
   get_my_info,
@@ -307,6 +355,7 @@ const API = {
   time_in,
   time_out,
   timestamp_status,
+  get_all_timestamps,
 };
 
 export default API;
