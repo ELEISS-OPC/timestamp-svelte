@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Spinner } from "$components/ui/spinner";
   import { Button } from "$lib/components/ui/button/index.js";
   import * as Card from "$lib/components/ui/card/index.js";
   import {
@@ -15,8 +16,8 @@
     type SuperValidated,
   } from "sveltekit-superforms";
   import { zod4Client } from "sveltekit-superforms/adapters";
-  import { Spinner } from "$components/ui/spinner";
   import { formSchema, type FormSchema } from "./schema";
+  import SuccessfulLogin from "./successful-login.svelte";
 
   let {
     class: className,
@@ -39,72 +40,78 @@
     },
     onResult: () => {
       loading = false;
+      success = true;
     },
   });
 
   const { form: formData, enhance, errors } = form;
   let loading: boolean = $state(false);
+  let success: boolean = $state(false);
 </script>
 
 <div class={cn("flex flex-col gap-6", className)}>
   <Card.Root>
-    <Card.Header class="text-center">
-      <Card.Title class="text-xl">Welcome back</Card.Title>
-      <Card.Description>Login with your company email</Card.Description>
-    </Card.Header>
-    <Card.Content>
-      <form method="POST" use:enhance action="?/login">
-        <FieldGroup>
-          <Field>
-            <FieldLabel for="email-{id}">Email</FieldLabel>
-            <Input
-              id="email-{id}"
-              name="email"
-              type="email"
-              placeholder="name@infinetsolutionsph.com"
-              bind:value={$formData.email}
-              required
-              autocomplete="email"
-            />
-            {#if $errors.email}
-              <span class="text-destructive text-sm">{$errors.email}</span>
-            {/if}
-          </Field>
-          <Field>
-            <div class="flex items-center">
-              <FieldLabel for="password-{id}">Password</FieldLabel>
-              <a
-                href="##"
-                class="ms-auto text-sm underline-offset-4 hover:underline"
-              >
-                Forgot your password?
-              </a>
-            </div>
-            <Input
-              id="password-{id}"
-              name="password"
-              type="password"
-              required
-              bind:value={$formData.password}
-              autocomplete="current-password"
-            />
-            {#if $errors.password}
-              <span class="text-destructive text-sm">{$errors.password}</span>
-            {/if}
-          </Field>
-          <Field>
-            <Button type="submit" disabled={loading}>
-              {#if loading}
-                <Spinner />
+    {#if !success}
+      <Card.Header class="text-center">
+        <Card.Title class="text-xl">Welcome back</Card.Title>
+        <Card.Description>Login with your company email</Card.Description>
+      </Card.Header>
+      <Card.Content>
+        <form method="POST" use:enhance action="?/login">
+          <FieldGroup>
+            <Field>
+              <FieldLabel for="email-{id}">Email</FieldLabel>
+              <Input
+                id="email-{id}"
+                name="email"
+                type="email"
+                placeholder="name@infinetsolutionsph.com"
+                bind:value={$formData.email}
+                required
+                autocomplete="email"
+              />
+              {#if $errors.email}
+                <span class="text-destructive text-sm">{$errors.email}</span>
               {/if}
-              Login
-            </Button>
-            <FieldDescription class="text-center">
-              Don't have an account? <a href="##">Ask an officer for one</a>
-            </FieldDescription>
-          </Field>
-        </FieldGroup>
-      </form>
-    </Card.Content>
+            </Field>
+            <Field>
+              <div class="flex items-center">
+                <FieldLabel for="password-{id}">Password</FieldLabel>
+                <a
+                  href="##"
+                  class="ms-auto text-sm underline-offset-4 hover:underline"
+                >
+                  Forgot your password?
+                </a>
+              </div>
+              <Input
+                id="password-{id}"
+                name="password"
+                type="password"
+                required
+                bind:value={$formData.password}
+                autocomplete="current-password"
+              />
+              {#if $errors.password}
+                <span class="text-destructive text-sm">{$errors.password}</span>
+              {/if}
+            </Field>
+            <Field>
+              <Button type="submit" disabled={loading}>
+                {#if loading}
+                  <Spinner />
+                {/if}
+                Login
+              </Button>
+              <FieldDescription class="text-center">
+                Don't have an account? <a href="##">Ask an officer for one</a>
+              </FieldDescription>
+            </Field>
+          </FieldGroup>
+        </form>
+      </Card.Content>
+    {:else}
+      <SuccessfulLogin />
+    {/if}
   </Card.Root>
 </div>
