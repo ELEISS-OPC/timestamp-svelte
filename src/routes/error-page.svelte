@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { FrownIcon } from "@lucide/svelte";
   import * as Card from "$lib/components/ui/card/index.js";
+  import { FrownIcon } from "@lucide/svelte";
   import type { Snippet } from "svelte";
   let {
     children,
