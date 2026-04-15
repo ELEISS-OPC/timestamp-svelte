@@ -1,4 +1,4 @@
-import { urlJoin } from "$lib/utils";
+import { urlJoin } from "$utils";
 import STATUS from "$lib/status";
 import { BACKEND_URL } from "$env/static/private";
 import errors from "$lib/errors";

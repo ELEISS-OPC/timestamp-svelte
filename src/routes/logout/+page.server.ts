@@ -1,5 +1,5 @@
 import { USER_COOKIE_FIELDS } from "$lib/constants";
-import { deleteCookie } from "$lib/utils";
+import { deleteCookie } from "$utils";
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 

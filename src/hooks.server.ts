@@ -11,7 +11,7 @@ import {
   optionalSetCookie,
   setCookie,
   checkValidUserInfo,
-} from "$lib/utils";
+} from "$utils";
 import { type Handle, redirect } from "@sveltejs/kit";
 
 const cookieOptions = {

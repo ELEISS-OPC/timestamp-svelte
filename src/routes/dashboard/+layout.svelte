@@ -5,7 +5,7 @@
   import * as Breadcrumb from "$lib/components/ui/breadcrumb/index.js";
   import * as Sidebar from "$lib/components/ui/sidebar/index.js";
   import { page } from "$app/state";
-  import { toTitleCase } from "$lib/string.js";
+  import { toTitleCase } from "$utils";
 
   let { data, children }: LayoutProps = $props();
   const currentPath = $derived(page.url.pathname);
