@@ -15,6 +15,7 @@
     type SuperValidated,
   } from "sveltekit-superforms";
   import { onMount } from "svelte";
+  import { Spinner } from "$components/ui/spinner";
 
   let {
     user,
@@ -35,6 +36,7 @@
   ] as const;
 
   let selectValue = $state(String(Role.Employee));
+  let formSubmitLoading = $state(false);
 
   // svelte-ignore state_referenced_locally
   const {
@@ -46,6 +48,15 @@
     validators: zod4Client(AddEmployeeSchema),
     resetForm: true,
     validationMethod: "oninput",
+    onSubmit: () => {
+      formSubmitLoading = true;
+    },
+    onError: () => {
+      formSubmitLoading = false;
+    },
+    onResult: () => {
+      formSubmitLoading = false;
+    },
   });
 
   const triggerContent = $derived(
@@ -165,7 +176,9 @@
         >
           Cancel
         </Dialog.Close>
-        <Button type="submit">Add user</Button>
+        <Button type="submit" disabled={formSubmitLoading}>
+          {formSubmitLoading ? <Spinner /> : "Add user"}
+        </Button>
       </Dialog.Footer>
     </form>
   </Dialog.Content>
