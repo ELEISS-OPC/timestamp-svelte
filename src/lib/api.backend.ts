@@ -377,6 +377,57 @@ export function get_all_employees(token: string) {
   });
 }
 
+export function create_employee(
+  token: string,
+  data: {
+    first_name: string;
+    middle_name?: string | null;
+    last_name: string;
+    email: string;
+    password: string;
+    role_id: number;
+  },
+) {
+  return fetch(urlJoin(BACKEND_URL, "/user"), {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  }).then((response) => {
+    if (!response.ok) {
+      switch (response.status) {
+        case STATUS.HTTP_400_BAD_REQUEST:
+          throw new errors.BadRequestError(
+            "Something is wrong with this request.",
+            STATUS.HTTP_400_BAD_REQUEST,
+          );
+        case STATUS.HTTP_401_UNAUTHORIZED:
+          throw new errors.UnauthorizedError(
+            "You are not authorized to perform this action.",
+            STATUS.HTTP_401_UNAUTHORIZED,
+          );
+        case STATUS.HTTP_409_CONFLICT:
+          throw new errors.UserAlreadyExistsError(
+            "A user with the provided email already exists.",
+            STATUS.HTTP_409_CONFLICT,
+          );
+        case STATUS.HTTP_500_INTERNAL_SERVER_ERROR:
+          throw new errors.ServerError(
+            "Something went wrong on the server.",
+            STATUS.HTTP_500_INTERNAL_SERVER_ERROR,
+          );
+        default:
+          throw new Error(
+            `Failed to create employee with status: ${response.status}`,
+          );
+      }
+    }
+    return response.json();
+  });
+}
+
 const API = {
   login,
   get_my_info,
@@ -386,6 +437,7 @@ const API = {
   timestamp_status,
   get_all_timestamps,
   get_all_employees,
+  create_employee,
 };
 
 export default API;
