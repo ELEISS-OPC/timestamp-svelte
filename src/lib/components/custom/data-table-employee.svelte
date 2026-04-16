@@ -13,7 +13,7 @@
   onMount(async () => {
     if (user.avatar_url_preview && user.avatar_url) return;
     avatarURLpreview = await getEmployeeAvatar(user);
-    avatarURL = await getEmployeeAvatar(user);
+    avatarURL = await getEmployeeAvatar(user, { scale: 100 });
   });
 </script>
 
