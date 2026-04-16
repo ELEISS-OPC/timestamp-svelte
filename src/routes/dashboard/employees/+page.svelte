@@ -3,4 +3,4 @@
   let { data } = $props();
 </script>
 
-<DataTable data={data.users} />
+<DataTable data={data.users} user={data.user} />

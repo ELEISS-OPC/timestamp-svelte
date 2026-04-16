@@ -74,9 +74,10 @@
   } from "@tanstack/table-core";
   import DataTableCheckbox from "$components/custom/data-table-checkbox.svelte";
   import DataTableEmployee from "$components/custom/data-table-employee.svelte";
+  import AddUser from "./add-user.svelte";
   import type { Employee } from "$lib/types";
 
-  let { data }: { data: Employee[] } = $props();
+  let { data, user }: { data: Employee[]; user: Employee } = $props();
   let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
   let sorting = $state<SortingState>([]);
   let columnFilters = $state<ColumnFiltersState>([]);
@@ -153,7 +154,8 @@
 </script>
 
 <div class="w-full flex-col justify-start gap-12">
-  <div class="mb-4 px-4 lg:px-6 justify-end flex">
+  <div class="mb-4 px-4 lg:px-6 justify-end flex gap-2">
+    <AddUser {user}/>
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
         {#snippet child({ props })}
