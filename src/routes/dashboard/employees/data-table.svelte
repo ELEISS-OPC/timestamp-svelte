@@ -41,6 +41,8 @@
 </script>
 
 <script lang="ts">
+  import DataTableCheckbox from "$components/custom/data-table-checkbox.svelte";
+  import DataTableEmployee from "$components/custom/data-table-employee.svelte";
   import { Button } from "$lib/components/ui/button/index.js";
   import { createSvelteTable } from "$lib/components/ui/data-table";
   import {
@@ -51,6 +53,7 @@
   import { Label } from "$lib/components/ui/label/index.js";
   import * as Select from "$lib/components/ui/select/index.js";
   import * as Table from "$lib/components/ui/table/index.js";
+  import type { Employee } from "$lib/types";
   import ChevronDownIcon from "@tabler/icons-svelte/icons/chevron-down";
   import ChevronLeftIcon from "@tabler/icons-svelte/icons/chevron-left";
   import ChevronRightIcon from "@tabler/icons-svelte/icons/chevron-right";
@@ -72,12 +75,19 @@
     type SortingState,
     type VisibilityState,
   } from "@tanstack/table-core";
-  import DataTableCheckbox from "$components/custom/data-table-checkbox.svelte";
-  import DataTableEmployee from "$components/custom/data-table-employee.svelte";
+  import { type Infer, type SuperValidated } from "sveltekit-superforms";
   import AddUser from "./add-user.svelte";
-  import type { Employee } from "$lib/types";
+  import { type AddEmployee } from "./schema";
 
-  let { data, user }: { data: Employee[]; user: Employee } = $props();
+  let {
+    data,
+    user,
+    form,
+  }: {
+    data: Employee[];
+    user: Employee;
+    form: SuperValidated<Infer<AddEmployee>>;
+  } = $props();
   let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
   let sorting = $state<SortingState>([]);
   let columnFilters = $state<ColumnFiltersState>([]);
@@ -155,7 +165,7 @@
 
 <div class="w-full flex-col justify-start gap-12">
   <div class="mb-4 px-4 lg:px-6 justify-end flex gap-2">
-    <AddUser {user}/>
+    <AddUser {user} {form} />
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
         {#snippet child({ props })}
