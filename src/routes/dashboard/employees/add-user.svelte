@@ -16,7 +16,9 @@
   } from "sveltekit-superforms";
   import { onMount } from "svelte";
   import { Spinner } from "$components/ui/spinner";
+    import { toast } from "svelte-sonner";
 
+ import { SonnerStyle } from "$lib/constants";
   let {
     user,
     form,
@@ -51,8 +53,14 @@
     onSubmit: () => {
       formSubmitLoading = true;
     },
-    onError: () => {
+    onError: ({ result }) => {
       formSubmitLoading = false;
+      if (result.error.message) {
+        toast.error(result.error.message, {
+          position: "top-center",
+          style: SonnerStyle.destructive,
+        });
+      }
     },
     onResult: () => {
       formSubmitLoading = false;
