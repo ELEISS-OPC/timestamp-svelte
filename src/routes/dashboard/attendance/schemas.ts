@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const EmployeeSchema = z.object({
-  id: z.number(),
+  id: z.nonnegative(),
   first_name: z.string(),
   middle_name: z.string().nullable(),
   last_name: z.string(),
