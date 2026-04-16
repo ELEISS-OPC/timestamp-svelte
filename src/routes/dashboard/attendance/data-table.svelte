@@ -23,7 +23,7 @@
     {
       accessorKey: "employee",
       header: "Employee",
-      cell: ({ row }) => renderComponent(DataTableEmployee, { row }),
+      cell: ({ row }) => renderComponent(DataTableEmployee, { user: row.original.user }),
     },
     {
       accessorKey: "date",
@@ -79,9 +79,9 @@
     type SortingState,
     type VisibilityState,
   } from "@tanstack/table-core";
-  import DataTableCheckbox from "./data-table-checkbox.svelte";
+  import DataTableCheckbox from "$components/custom/data-table-checkbox.svelte";
   import DataTableDate from "./data-table-date.svelte";
-  import DataTableEmployee from "./data-table-employee.svelte";
+  import DataTableEmployee from "$components/custom/data-table-employee.svelte";
   import DataTableTimeIn from "./data-table-time-in.svelte";
   import DataTableTimeOut from "./data-table-time-out.svelte";
   import type { Schema } from "./schemas";
