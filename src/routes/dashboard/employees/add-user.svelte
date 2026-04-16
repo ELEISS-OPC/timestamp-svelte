@@ -17,6 +17,7 @@
   import { onMount } from "svelte";
   import { Spinner } from "$components/ui/spinner";
   import { toast } from "svelte-sonner";
+  import PasswordInput from "$components/custom/password-input.svelte";
 
   import { SonnerStyle } from "$lib/constants";
   let {
@@ -71,6 +72,7 @@
     roles.find((r) => r.value === Number(selectValue))?.label ??
       "Select a role",
   );
+  let passwordVisible = $state(false);
 
   onMount(() => {
     $formData.role_id = Number(selectValue);
@@ -139,12 +141,14 @@
         </div>
         <div class="grid gap-3">
           <Label for="password">Password</Label>
-          <Input
-            id="password"
-            name="password"
-            required
-            bind:value={$formData.password}
-          />
+          <div class="relative">
+            <PasswordInput
+              id="password"
+              name="password"
+              required
+              value={$formData.password}
+            />
+          </div>
           {@render inputErrMsg($errors.password)}
         </div>
         <div class="grid gap-3">
