@@ -362,7 +362,7 @@
   {/each}
 </Tabs.Root>
 
-{#snippet DraggableRow({ row }: { row: Row })}
+{#snippet DraggableRow({ row }: { row: Row<Schema> })}
   <Table.Row data-state={row.getIsSelected() && "selected"}>
     {#each row.getVisibleCells() as cell (cell.id)}
       <Table.Cell>
