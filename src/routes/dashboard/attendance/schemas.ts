@@ -5,7 +5,7 @@ export const EmployeeSchema = z.object({
   first_name: z.string(),
   middle_name: z.string().nullable(),
   last_name: z.string(),
-  email: z.string(),
+  email: z.email(),
   role_id: z.number(),
   avatar_url: z.string().nullable(),
   avatar_url_preview: z.string().nullable(),
