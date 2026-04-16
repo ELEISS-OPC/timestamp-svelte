@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const EmployeeSchema = z.object({
-  id: z.nonnegative(),
+  id: z.number(),
   first_name: z.string(),
   middle_name: z.string().nullable(),
   last_name: z.string(),
@@ -11,7 +11,7 @@ export const EmployeeSchema = z.object({
   avatar_url_preview: z.string().nullable(),
 });
 
-export const schema = z.object({
+export const TimestampSchema = z.object({
   id: z.number(),
   user: EmployeeSchema,
   time_in: z.iso.datetime(),
@@ -25,6 +25,3 @@ export const schema = z.object({
   time_out_selfie: z.string().nullable(),
   time_out_selfie_preview: z.string().nullable(),
 });
-
-export type Schema = z.infer<typeof schema>;
-export type EmployeeSchema = z.infer<typeof EmployeeSchema>;

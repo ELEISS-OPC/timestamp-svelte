@@ -100,9 +100,19 @@ export class ImageTooLargeError extends APIError {
   }
 }
 
+export class UserAlreadyExistsError extends APIError {
+  constructor(
+    message: string = "A user with the provided email already exists.",
+    statusCode: number = STATUS.HTTP_409_CONFLICT,
+  ) {
+    super(message, statusCode);
+  }
+}
+
 const errors = {
   ServerError,
   UserNotFoundError,
+  UserAlreadyExistsError,
   InvalidCredentialsError,
   UnauthorizedError,
   BadRequestError,
