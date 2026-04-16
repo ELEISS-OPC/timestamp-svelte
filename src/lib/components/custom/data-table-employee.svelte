@@ -9,11 +9,11 @@
   let { user }: { user: Employee } = $props();
   let avatarURLpreview = $derived(user.avatar_url_preview);
   let avatarURL = $derived(user.avatar_url);
+  let fallbackImg = $state("");
 
   onMount(async () => {
     if (user.avatar_url_preview && user.avatar_url) return;
-    avatarURLpreview = await getEmployeeAvatar(user);
-    avatarURL = await getEmployeeAvatar(user, { scale: 100 });
+    fallbackImg = await getEmployeeAvatar(user);
   });
 </script>
 
@@ -21,14 +21,17 @@
   <div class="flex flex-row gap-3 items-center">
     <Popover.Trigger class="flex flex-row gap-3 items-center">
       <Avatar.Root class="w-8 h-8">
-        <Avatar.Image src={avatarURLpreview} alt={user.first_name} />
+        <Avatar.Image
+          src={avatarURLpreview || fallbackImg}
+          alt={user.first_name}
+        />
         <Avatar.Fallback>
           {`${user.first_name[0]}${user.last_name[0]}`}
         </Avatar.Fallback>
       </Avatar.Root>
     </Popover.Trigger>
     <Popover.Content class="p-0 overflow-hidden">
-      <img src={avatarURL} alt={user.first_name} />
+      <img src={avatarURL || fallbackImg} alt={user.first_name} />
     </Popover.Content>
     <div class="flex flex-col">
       <span>
