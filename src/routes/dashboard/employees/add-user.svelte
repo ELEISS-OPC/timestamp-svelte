@@ -181,6 +181,7 @@
           type="button"
           onclick={() => reset()}
           class={buttonVariants({ variant: "outline" })}
+          disabled={formSubmitLoading}
         >
           Cancel
         </Dialog.Close>
