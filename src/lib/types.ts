@@ -1,13 +1,8 @@
-export type Employee = {
-  id: number;
-  first_name: string;
-  middle_name: string | null;
-  last_name: string;
-  email: string;
-  role_id: number;
-  avatar_url: string | null;
-  avatar_url_preview: string | null;
-};
+import { z } from "zod";
+import { EmployeeSchema, TimestampSchema } from "./schemas";
+
+export type Timestamp = z.infer<typeof TimestampSchema>;
+export type Employee = z.infer<typeof EmployeeSchema>;
 
 export interface dicebearOptions {
   scale?: number;
