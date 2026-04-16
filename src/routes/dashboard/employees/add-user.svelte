@@ -16,9 +16,9 @@
   } from "sveltekit-superforms";
   import { onMount } from "svelte";
   import { Spinner } from "$components/ui/spinner";
-    import { toast } from "svelte-sonner";
+  import { toast } from "svelte-sonner";
 
- import { SonnerStyle } from "$lib/constants";
+  import { SonnerStyle } from "$lib/constants";
   let {
     user,
     form,
@@ -185,7 +185,11 @@
           Cancel
         </Dialog.Close>
         <Button type="submit" disabled={formSubmitLoading}>
-          {formSubmitLoading ? <Spinner /> : "Add user"}
+          {#if formSubmitLoading}
+            <Spinner />
+          {:else}
+            Add User
+          {/if}
         </Button>
       </Dialog.Footer>
     </form>
