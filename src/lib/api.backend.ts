@@ -348,6 +348,35 @@ export function get_all_timestamps(
   });
 }
 
+export function get_all_employees(token: string) {
+  return fetch(urlJoin(BACKEND_URL, "/user/all"), {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((response) => {
+    if (!response.ok) {
+      switch (response.status) {
+        case STATUS.HTTP_401_UNAUTHORIZED:
+          throw new errors.UnauthorizedError(
+            "You are not authorized to access this resource.",
+            STATUS.HTTP_401_UNAUTHORIZED,
+          );
+
+        case STATUS.HTTP_500_INTERNAL_SERVER_ERROR:
+          throw new errors.ServerError(
+            "Something went wrong on the server.",
+            STATUS.HTTP_500_INTERNAL_SERVER_ERROR,
+          );
+        default:
+          throw new Error(
+            `Failed to fetch employees with status: ${response.status}`,
+          );
+      }
+    }
+    return response.json();
+  });
+}
+
 const API = {
   login,
   get_my_info,
@@ -356,6 +385,7 @@ const API = {
   time_out,
   timestamp_status,
   get_all_timestamps,
+  get_all_employees,
 };
 
 export default API;
