@@ -72,7 +72,6 @@
     roles.find((r) => r.value === Number(selectValue))?.label ??
       "Select a role",
   );
-  let passwordVisible = $state(false);
 
   onMount(() => {
     $formData.role_id = Number(selectValue);
