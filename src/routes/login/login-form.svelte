@@ -18,6 +18,7 @@
   import { zod4Client } from "sveltekit-superforms/adapters";
   import { formSchema, type FormSchema } from "./schema";
   import SuccessfulLogin from "./successful-login.svelte";
+  import PasswordInput from "$components/custom/password-input.svelte";
 
   let {
     class: className,
@@ -84,10 +85,9 @@
                   Forgot your password?
                 </a>
               </div>
-              <Input
+              <PasswordInput
                 id="password-{id}"
                 name="password"
-                type="password"
                 required
                 bind:value={$formData.password}
                 autocomplete="current-password"
