@@ -3,13 +3,13 @@
   import { Button } from "$lib/components/ui/button/index.js";
   import { EyeIcon, EyeOffIcon } from "@lucide/svelte";
 
-  let { value , id, name, required } = $props();
+  let { value = $bindable(), ...props } = $props();
 
   let passwordVisible = $state(false);
 </script>
 
 <div class="relative">
-  <Input {id} {name} {required} type={passwordVisible ? "text" : "password"} bind:value={value} />
+  <Input type={passwordVisible ? "text" : "password"} bind:value {...props} />
   <Button
     variant="ghost"
     size="icon"

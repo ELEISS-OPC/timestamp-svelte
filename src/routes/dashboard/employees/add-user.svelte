@@ -146,7 +146,7 @@
               id="password"
               name="password"
               required
-              value={$formData.password}
+              bind:value={$formData.password}
             />
           </div>
           {@render inputErrMsg($errors.password)}
