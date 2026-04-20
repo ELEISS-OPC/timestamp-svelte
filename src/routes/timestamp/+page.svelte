@@ -155,7 +155,11 @@
 <div class="relative w-screen h-dvh bg-gray-100 overflow-hidden">
   <EasyCamera
     bind:width
-    style="inset:0;"
+    style="
+      width: 100dvw;
+      height: 100dvh;
+      object-fit: cover;
+    "
     bind:this={camera}
     autoOpen
     mirrorDisplay
