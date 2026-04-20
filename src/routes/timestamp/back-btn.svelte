@@ -21,6 +21,6 @@
 </Button>
 
 <!-- Mobile Button -->
-<Button class={cn(mobileControlsStyle, "left-5 bg-muted/20")} onclick={goBack}>
-  <ArrowLeft class="w-8 h-8" size={32} />
+<Button class={cn(mobileControlsStyle, "left-5 bg-muted")} onclick={goBack}>
+  <ArrowLeft class="w-8 h-8 text-muted-foreground" size={32} />
 </Button>
