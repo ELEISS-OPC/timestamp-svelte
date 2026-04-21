@@ -21,8 +21,10 @@
   import SubmitButton from "./submit-btn.svelte";
   import TimestampButton from "./timestamp-btn.svelte";
   import BackButton from "./back-btn.svelte";
+  import UserBtn from "./user-btn.svelte";
   import { getGreeting, compressBase64Image } from "$utils";
   import { Role } from "$lib/enums";
+  import ControlBar from "$components/custom/control-bar/";
 
   let {
     data,
@@ -167,7 +169,7 @@
       const message = label
         ? `Loading camera "${label}"...`
         : "Loading an unknown camera...";
-      loadingCameraToast = toast(message, {
+      loadingCameraToast = toast.loading(message, {
         position: "top-center",
         duration: Infinity,
       });
@@ -178,24 +180,42 @@
   />
   <InfoOverlay {time} {latitude} {longitude} {address} />
 
-  {#if data.user.role_id !== Role.Employee}
-    <BackButton />
-  {/if}
-
-  {#if !$formData.selfie}
-    <TimestampButton {capture}
-      >{isTimedIn ? "Time Out" : "Time In"}</TimestampButton
+  <ControlBar.Root class="z-20 bg-transparent">
+    {#if !$formData.selfie}
+      <ControlBar.Group class="gap-2">
+        {#if data.user.role_id !== Role.Employee}
+          <BackButton />
+        {/if}
+        <UserBtn />
+      </ControlBar.Group>
+    {/if}
+    <ControlBar.Group
+      class={$formData.selfie ? "justify-between" : "justify-end"}
     >
-  {:else}
-    <RetakeButton {retake} />
-    <form method="post" use:enhance>
-      <input type="hidden" name="user_id" bind:value={$formData.user_id} />
-      <input type="hidden" name="latitude" bind:value={$formData.latitude} />
-      <input type="hidden" name="longitude" bind:value={$formData.longitude} />
-      <input type="hidden" name="selfie" bind:value={$formData.selfie} />
-      <SubmitButton action={isTimedIn ? "?/time_out" : "?/time_in"} />
-    </form>
-  {/if}
+      {#if !$formData.selfie}
+        <TimestampButton {capture}
+          >{isTimedIn ? "Time Out" : "Time In"}</TimestampButton
+        >
+      {:else}
+        <RetakeButton {retake} />
+        <form method="post" use:enhance>
+          <input type="hidden" name="user_id" bind:value={$formData.user_id} />
+          <input
+            type="hidden"
+            name="latitude"
+            bind:value={$formData.latitude}
+          />
+          <input
+            type="hidden"
+            name="longitude"
+            bind:value={$formData.longitude}
+          />
+          <input type="hidden" name="selfie" bind:value={$formData.selfie} />
+          <SubmitButton action={isTimedIn ? "?/time_out" : "?/time_in"} />
+        </form>
+      {/if}
+    </ControlBar.Group>
+  </ControlBar.Root>
 
   <!-- Captured image overlay -->
   {#if $formData.selfie}

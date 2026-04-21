@@ -5,8 +5,8 @@
 
   let {
     retake,
-    desktopControlsStyle = "absolute bottom-5 z-20 inline-flex hidden md:inline-flex",
-    mobileControlsStyle = "absolute bottom-10 z-20 inline-flex rounded-full w-16 h-16 text-4xl md:hidden",
+    desktopControlsStyle = "hidden md:inline-flex",
+    mobileControlsStyle = "inline-flex rounded-full w-16 h-16 text-4xl md:hidden",
   }: {
     retake: () => void;
     desktopControlsStyle?: string;

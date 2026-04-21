@@ -5,9 +5,9 @@
   import ArrowLeft from "@lucide/svelte/icons/arrow-left";
 
   const desktopControlsStyle =
-    "absolute bottom-5 z-20 inline-flex hidden md:inline-flex";
+    "hidden md:inline-flex";
   const mobileControlsStyle =
-    "absolute bottom-10 z-20 inline-flex rounded-full w-16 h-16 text-4xl md:hidden";
+    "inline-flex rounded-full w-16 h-16 text-4xl md:hidden";
 
   function goBack() {
     goto("/dashboard"); // navigate back to dashboard
