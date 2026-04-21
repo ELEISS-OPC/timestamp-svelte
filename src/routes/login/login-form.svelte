@@ -39,9 +39,11 @@
     onError: () => {
       loading = false;
     },
-    onResult: () => {
+    onResult: ({ result }) => {
       loading = false;
-      success = true;
+      if (result.type === "success") {
+        success = true;
+      }
     },
   });
 
