@@ -156,8 +156,6 @@
   <EasyCamera
     bind:width
     style="
-      width: 100dvw;
-      height: 100dvh;
       object-fit: cover;
     "
     bind:this={camera}
@@ -165,7 +163,11 @@
     mirrorDisplay
     useAudio={false}
     onInit={(devices) => {
-      loadingCameraToast = toast(`Loading camera "${devices[0].label}" `, {
+      const label = devices[0].label;
+      const message = label
+        ? `Loading camera "${label}"...`
+        : "Loading an unknown camera...";
+      loadingCameraToast = toast(message, {
         position: "top-center",
         duration: Infinity,
       });
