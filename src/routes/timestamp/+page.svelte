@@ -156,6 +156,8 @@
   <EasyCamera
     bind:width
     style="
+      width: 100dvw;
+      height: 100dvh;
       object-fit: cover;
     "
     bind:this={camera}
